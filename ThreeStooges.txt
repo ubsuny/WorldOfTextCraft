@@ -1,0 +1,8 @@
+!
+! Test party configuration: 
+! Warrior, Rogue, Priest
+! Fields are : 
+! name, entity type, attack power, heal power, defense power
+Rogue;Curly;20;0;0;
+Priest;Larry;0;0;8;
+Warrior;Moe;0;3;0;

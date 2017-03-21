@@ -1,0 +1,116 @@
+Your powers cannot be negative.
+To punish you, the gods set your hitpoints to 1 and make you feeble as a kitten.
+ ----- Action list ----
+Shemp will perform action 0 on their target :  NO TARGET!
+Shemp will perform action 3 on their target :  NO TARGET!
+Curly will perform action 0 on their target : Shemp
+Moe will perform action 2 on their target : Shemp
+Larry will perform action 1 on their target : Moe
+Shemp has gone crazy. He is attacking everyone. Put him out of his misery. 
+------------------------------- Turn : 0-------------------------------
+   === players:
+       Curly (     Rogue): HP=  100, attack=   20, defend=    0, heal=    0, mana =     0, target=       Shemp
+       Larry (    Priest): HP=    1, attack=    0, defend=    0, heal=    0, mana =   100, target=         Moe
+         Moe (   Warrior): HP=  100, attack=    0, defend=    3, heal=    0, mana =     0, target=       Shemp
+
+   === monsters:
+       Shemp (      Boss): HP=  100, attack=   20, defend=    0, heal=    0, mana =    10, multi =    5, no target
+Shemp attacks Curly with attack power 20
+Curly loses 20 hit points after attack 20 and defense 0
+Shemp multi-attacks Curly with attack power 5
+Curly loses 5 hit points after attack 5 and defense 0
+Shemp multi-attacks Larry with attack power 5
+Larry loses 5 hit points after attack 5 and defense 0
+Larry, the brave Priest, has died.
+Shemp multi-attacks Moe with attack power 5
+Moe loses 2 hit points after attack 5 and defense 3
+Curly attacks Shemp with attack power 20
+Shemp loses 20 hit points after attack 20 and defense 0
+Moe defends against Shemp, defense mitigation 3
+Larry is dead
+------------------------------- Turn : 1-------------------------------
+   === players:
+       Curly (     Rogue): HP=   75, attack=   20, defend=    0, heal=    0, mana =     0, target=       Shemp
+       Larry (    Priest): HP=    0, attack=    0, defend=    0, heal=    0, mana =   100, target=         Moe
+         Moe (   Warrior): HP=   98, attack=    0, defend=    3, heal=    0, mana =     0, target=       Shemp
+
+   === monsters:
+       Shemp (      Boss): HP=   80, attack=   20, defend=    0, heal=    0, mana =    10, multi =    5, target=         Moe
+Shemp attacks Moe with attack power 20
+Moe loses 17 hit points after attack 20 and defense 3
+Shemp multi-attacks Curly with attack power 5
+Curly loses 5 hit points after attack 5 and defense 0
+Shemp multi-attacks Larry with attack power 5
+Larry loses 5 hit points after attack 5 and defense 0
+Larry, the brave Priest, has died.
+Shemp multi-attacks Moe with attack power 5
+Moe loses 2 hit points after attack 5 and defense 3
+Curly attacks Shemp with attack power 20
+Shemp loses 20 hit points after attack 20 and defense 0
+Moe defends against Shemp, defense mitigation 3
+Larry is dead
+------------------------------- Turn : 2-------------------------------
+   === players:
+       Curly (     Rogue): HP=   70, attack=   20, defend=    0, heal=    0, mana =     0, target=       Shemp
+       Larry (    Priest): HP=    0, attack=    0, defend=    0, heal=    0, mana =   100, target=         Moe
+         Moe (   Warrior): HP=   79, attack=    0, defend=    3, heal=    0, mana =     0, target=       Shemp
+
+   === monsters:
+       Shemp (      Boss): HP=   60, attack=   20, defend=    0, heal=    0, mana =    10, multi =    5, target=         Moe
+Shemp attacks Moe with attack power 20
+Moe loses 17 hit points after attack 20 and defense 3
+Shemp multi-attacks Curly with attack power 5
+Curly loses 5 hit points after attack 5 and defense 0
+Shemp multi-attacks Larry with attack power 5
+Larry loses 5 hit points after attack 5 and defense 0
+Larry, the brave Priest, has died.
+Shemp multi-attacks Moe with attack power 5
+Moe loses 2 hit points after attack 5 and defense 3
+Curly attacks Shemp with attack power 20
+Shemp loses 20 hit points after attack 20 and defense 0
+Moe defends against Shemp, defense mitigation 3
+Larry is dead
+------------------------------- Turn : 3-------------------------------
+   === players:
+       Curly (     Rogue): HP=   65, attack=   20, defend=    0, heal=    0, mana =     0, target=       Shemp
+       Larry (    Priest): HP=    0, attack=    0, defend=    0, heal=    0, mana =   100, target=         Moe
+         Moe (   Warrior): HP=   60, attack=    0, defend=    3, heal=    0, mana =     0, target=       Shemp
+
+   === monsters:
+       Shemp (      Boss): HP=   40, attack=   20, defend=    0, heal=    0, mana =    10, multi =    5, target=         Moe
+Shemp attacks Moe with attack power 20
+Moe loses 17 hit points after attack 20 and defense 3
+Shemp multi-attacks Curly with attack power 5
+Curly loses 5 hit points after attack 5 and defense 0
+Shemp multi-attacks Larry with attack power 5
+Larry loses 5 hit points after attack 5 and defense 0
+Larry, the brave Priest, has died.
+Shemp multi-attacks Moe with attack power 5
+Moe loses 2 hit points after attack 5 and defense 3
+Curly attacks Shemp with attack power 20
+Shemp loses 20 hit points after attack 20 and defense 0
+Moe defends against Shemp, defense mitigation 3
+Larry is dead
+------------------------------- Turn : 4-------------------------------
+   === players:
+       Curly (     Rogue): HP=   60, attack=   20, defend=    0, heal=    0, mana =     0, target=       Shemp
+       Larry (    Priest): HP=    0, attack=    0, defend=    0, heal=    0, mana =   100, target=         Moe
+         Moe (   Warrior): HP=   41, attack=    0, defend=    3, heal=    0, mana =     0, target=       Shemp
+
+   === monsters:
+       Shemp (      Boss): HP=   20, attack=   20, defend=    0, heal=    0, mana =    10, multi =    5, target=         Moe
+Shemp attacks Moe with attack power 20
+Moe loses 17 hit points after attack 20 and defense 3
+Shemp multi-attacks Curly with attack power 5
+Curly loses 5 hit points after attack 5 and defense 0
+Shemp multi-attacks Larry with attack power 5
+Larry loses 5 hit points after attack 5 and defense 0
+Larry, the brave Priest, has died.
+Shemp multi-attacks Moe with attack power 5
+Moe loses 2 hit points after attack 5 and defense 3
+Curly attacks Shemp with attack power 20
+Shemp loses 20 hit points after attack 20 and defense 0
+Shemp, the brave Boss, has died.
+Moe : target Shemp is already dead.
+Larry is dead
+Finished... exiting.

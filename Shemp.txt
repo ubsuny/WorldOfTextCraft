@@ -1,0 +1,4 @@
+!Description:
+Shemp has gone crazy. He is attacking everyone. Put him out of his misery. 
+! Non-Player character. Fields are "name", attack power, heal power, defense power, mana, multi attack power
+Shemp;20;0;0;10;5;

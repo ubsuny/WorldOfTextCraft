@@ -1,0 +1,4 @@
+! Test battle configuration.
+Curly;attack;Shemp;
+Moe;defend;Shemp;
+Larry;heal;Moe;

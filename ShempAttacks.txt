@@ -1,0 +1,3 @@
+! Test battle configuration.
+Shemp;attack;target;
+Shemp;attack;all;
