@@ -1,3 +1,4 @@
 Warrior;Fordring;0;10;0;
 Priest;Thrall;0;0;12;
-Rogue;Mograine;25;0;0;
+Rogue;Mograine;20;0;0;
+
