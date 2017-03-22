@@ -31,9 +31,8 @@ int Boss::multiAttack( Entity * other ) {
 };
    
 
-
 // Print to "out"
-void Boss::print( std::ostream & out) const {
+void Boss::printStats( std::ostream & out) const {
   out << std::setw(12)
       << name_ << " (" << std::setw(10) << className_ << "): HP=" << std::setw(5) << hitPoints_
       << ", attack=" << std::setw(5) << attackPower_
@@ -43,6 +42,19 @@ void Boss::print( std::ostream & out) const {
     out << ", mana = " << std::setw(5) << mana_;
   }
   out << ", multi =" << std::setw(5) << multiAttackPower_;
+  if ( target_ != 0 ) {
+    out << ", target=" << std::setw(12) << target_->name();
+  } else {
+    out << ", no target";
+  }
+}
+
+
+// Print to "out"
+void Boss::print( std::ostream & out) const {
+  out << std::setw(12)
+      << name_ << " (" << std::setw(10) << className_ << "): HP=" << std::setw(5) << hitPoints_
+      << ", mana = " << std::setw(5) << mana_;
   if ( target_ != 0 ) {
     out << ", target=" << std::setw(12) << target_->name();
   } else {

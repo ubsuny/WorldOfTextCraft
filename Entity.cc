@@ -60,7 +60,21 @@ void Entity::input( std::istream &in ) {
 };
 
 // Print to "out"
+
 void Entity::print( std::ostream & out) const {
+  out << std::setw(12)
+      << name_ << " (" << std::setw(10) << className_ << "): HP=" << std::setw(5) << hitPoints_
+      << ", mana = " << std::setw(5) << mana_;
+  if ( target_ != 0 ) {
+    out << ", target=" << std::setw(12) << target_->name();
+  } else {
+    out << ", no target";
+  }
+}
+
+
+
+void Entity::printStats( std::ostream & out) const {
   out << std::setw(12)
       << name_ << " (" << std::setw(10) << className_ << "): HP=" << std::setw(5) << hitPoints_
       << ", attack=" << std::setw(5) << attackPower_

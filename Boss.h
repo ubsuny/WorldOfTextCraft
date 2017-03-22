@@ -46,6 +46,7 @@ class Boss : public Entity{
     // Special multiattack to attack many at once. 
     virtual int multiAttack( Entity * other = 0);
 
+    virtual void printStats(std::ostream &out) const;
     virtual void print(std::ostream &out) const;
 
 

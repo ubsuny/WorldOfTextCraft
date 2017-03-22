@@ -101,7 +101,7 @@ class Battle {
   // Create a "typedef" that sets an alias of one type to another to save typing.
   typedef std::vector< std::shared_ptr<Entity> > coll_type;
 
- Battle(): turn_(0), description_(""), userTurns_(false) {}
+ Battle(): turn_(0), description_(""), userTurns_(false), scripted_(false) {}
   ~Battle() {}
 
   // Read the configuration for this Battle.
@@ -117,21 +117,31 @@ class Battle {
   // Clear the actions
   void clearActions() { actions_.clear(); } 
 
+  // Are we letting the user work in turns? 
+  void setUserTurns(bool userTurns=true) { userTurns_  = userTurns;}
   bool userTurns() const { return userTurns_;}
 
-  // Add an action
-  // in the format "source;action;target;"
-  bool parseAction( std::string );
-  
-  // Perform all actions
-  bool performActions();
+  // Perform scripted actions
+  bool performScriptedActions();
+
+  // For user turn-by-turn action
+  bool performUserActions( std::istream & in = std::cin );
 
 
+  // Print this turn
   virtual void print( std::ostream & out = std::cout );
+  // Print all of the stats of the players in the battle
+  void printStats( std::ostream & out = std::cout );
+  // Print the actions queued
   void printActions( std::ostream & out = std::cout );
 
+  // Return the description
   std::string description() const { return description_; }
 
+
+  // Print the splash screen
+  void splash( std::ostream & out = std::cout ) const;
+  
  private:
 
 
@@ -141,7 +151,7 @@ class Battle {
   coll_type pcs_;            // Player characters
   coll_type npcs_;           // Non-player characters
 
-
+  bool      scripted_;       // Is this fight scripted or user-turns? 
 
 
   //
@@ -164,11 +174,19 @@ class Battle {
 
   // A private "struct" (i.e. a class with all public members) to store the source and action type
   struct QuickAction{ 
-    Entity * source;
+    std::shared_ptr<Entity> source;
     ActionType action; 
-    QuickAction(Entity * s, ActionType a) : source(s), action(a) {}
+    QuickAction(std::shared_ptr<Entity> s=0, ActionType a=N_ACTIONS) : source(s), action(a) {}
   };
-  std::vector<QuickAction>   actions_;  // List of actions to perform per turn.
+  std::vector<QuickAction>   actions_;  // List of scripted actions to perform per turn.
+
+
+  // Add an action
+  // in the format "source;action;target;"
+  bool parseAction( std::string, QuickAction & qa );
+  
+
+
 };
 
 

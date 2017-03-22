@@ -38,17 +38,43 @@ int main( int argc, char ** argv ) {
     return 0;
   }
 
+
+  battle.splash();
+  std::cout << "Are you ready to begin? [Y/n] " << std::endl;
+  char c;
+  std::cin >> c;
+  if ( c == 'y' || c == 'Y') {
+    std::cout << "Excellent... let us begin..." << std::endl;
+  } else {
+    std::cout << "Oh well. Another time then..." << std::endl;
+    return 0;
+  }
+
+
   battle.printActions(); 
+
   
-  std::cout << battle.description() << std::endl;
 
   // Now loop and FIGHT!
   do {
     battle.print();
+    std::cout << "Continue? [Y/n] " << std::endl;
+    std::cin >> c;
+    if ( c != 'y' && c != 'Y') {
+      std::cout << "Bye, then." << std::endl;
+      break;
+    } 
   }
-  while ( battle.performActions() );
+  while ( battle.performScriptedActions() );
 
-  std::cout << "Finished... exiting." << std::endl;
+
+  std::cout << "   ___                _ _                  _ " << std::endl;
+  std::cout << "  / _ \\___   ___   __| | |__  _   _  ___  / \\" << std::endl;
+  std::cout << " / /_\\/ _ \\ / _ \\ / _` | '_ \\| | | |/ _ \\/  /" << std::endl;
+  std::cout << "/ /_\\\\ (_) | (_) | (_| | |_) | |_| |  __/\\_/ " << std::endl;
+  std::cout << "\\____/\\___/ \\___/ \\__,_|_.__/ \\__, |\\___\\/   " << std::endl;
+  std::cout << "                              |___/          " << std::endl;
+
 
   return 0; 
 };

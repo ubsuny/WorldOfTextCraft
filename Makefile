@@ -6,8 +6,8 @@ CXX=g++
 CXX_FLAGS=-Wall -std=c++0x
 
 
-EXEC_SRC = test_entity.cc test_boss.cc test_battle.cc
-EXEC = test_entity test_boss test_battle
+EXEC_SRC = test_entity.cc test_boss.cc test_battle.cc WorldOfTextCraft.cc
+EXEC = test_entity test_boss test_battle WorldOfTextCraft
 
 SRCS := $(wildcard *.cc)
 SRCS := $(filter-out $(EXEC_SRC), $(SRCS))
@@ -24,6 +24,10 @@ test_boss: $(OBJECTS) test_boss.cc
 
 test_battle: $(OBJECTS) test_battle.cc
 	$(CXX) $(CXX_FLAGS) $(OBJECTS) test_battle.cc -o test_battle
+
+WorldOfTextCraft: $(OBJECTS) WorldOfTextCraft.cc
+	$(CXX) $(CXX_FLAGS) $(OBJECTS) WorldOfTextCraft.cc -o WorldOfTextCraft
+
 
 # To obtain object files
 %.o: %.cc $(SRCS) $(wildcard *.h)

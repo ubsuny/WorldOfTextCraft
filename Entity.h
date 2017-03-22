@@ -79,6 +79,7 @@ class Entity {
   virtual void input( std::string instring);
   virtual void input( std::istream &in );
   virtual void print( std::ostream &out) const;
+  virtual void printStats( std::ostream &out) const;
   friend std::ostream & operator<<( std::ostream & out, Entity const & e);
   friend std::istream & operator>>( std::istream & in, Entity & e);
 

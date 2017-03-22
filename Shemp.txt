@@ -1,4 +1,4 @@
 !Description:
-Shemp has gone crazy. He is attacking everyone. Put him out of his misery. 
+Larry, Moe, and Curly are the Three Stooges. Their poor friend Shemp has been bitten by a zombie and is trying to kill them. Help Larry, Moe, and Curly put Shemp out of his misery. Nyuk Nyuk Nyuk.
 ! Non-Player character. Fields are "name", attack power, heal power, defense power, mana, multi attack power
 Shemp;20;0;0;10;5;
