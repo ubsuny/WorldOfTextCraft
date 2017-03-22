@@ -39,7 +39,6 @@ void Battle::splash( std::ostream & out ) const {
 bool Battle::readPCConfiguration( std::string filename )
 {
 
-  std::cout << "reading PC configuration" << std::endl;
   if ( pcs_.size() > 0 ) {
     std::cout << "Configuration already read... skipping reading from " << filename << std::endl;
     return false;
@@ -77,6 +76,7 @@ bool Battle::readPCConfiguration( std::string filename )
 	}
 	entity->input( tokens );
 	pcs_.push_back( entity );
+	std::cout << "Added entity: " << *( pcs_.back() ) << std::endl;
       }
     }
 
@@ -129,10 +129,16 @@ bool Battle::loadActionScript( std::string filename )
     std::string line;
     bool success = true; 
     while ( !in.eof() && success ) {
+
       std::getline( in, line );      
       if ( line[0] == '!' || line == "" ) continue;
       QuickAction qa;
       success = parseAction( line, qa );
+
+      if( !success ) {
+	std::cout << "Error in parseAction!" << std::endl;
+	return false; 
+      }
 
       // If the script has any PC actions, it is scripted and not user-input
       coll_type::iterator pcIt = std::find_if( pcs_.begin(), pcs_.end(), MatchSource( qa.source->name() ) );
@@ -142,10 +148,9 @@ bool Battle::loadActionScript( std::string filename )
 	std::cout << "Scripting input for " << (*pcIt)->name() << std::endl;
       }
       actions_.push_back(qa);
-      if( !success ) {
-	std::cout << "Error in parseAction!" << std::endl;
-	return false; 
-      }
+
+
+
     }
     in.close();
   }
@@ -171,6 +176,7 @@ bool Battle::parseAction(std::string line, QuickAction & qa)
   for (std::string each=""; std::getline(linestream, each, ';'); ){
     tokens.push_back(each);
   }
+
   if ( tokens.size() != 3 ) {
     std::cout << "Improper formatting of line " << line << std::endl;
     return false; 
@@ -206,13 +212,12 @@ bool Battle::parseAction(std::string line, QuickAction & qa)
     // Find the iterator with name "tokens[2]"
     targetIt = find_entity( tokens[2] );
     // Check to make sure we found an iterator
-    if ( targetIt == pcs_.end() ) {
+    if ( targetIt == pcs_.end() || targetIt == npcs_.end() ) {
       std::cout << "Error processing line " << line << std::endl;
       return false; 
     }
+    target = *targetIt;
   }
-  target = *targetIt;
-
 
   // parse the action type. 
   ActionType actionType = N_ACTIONS; // Error code
@@ -231,7 +236,6 @@ bool Battle::parseAction(std::string line, QuickAction & qa)
   }
   qa.source = source;
   qa.action = actionType ;
-
   return true; 
 }
 

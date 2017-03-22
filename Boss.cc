@@ -81,9 +81,11 @@ void Boss::input( std::string line )
     healPower_ = std::atoi( tokens[3].c_str() );    
     mana_ = std::atoi( tokens[4].c_str() );
     multiAttackPower_ = std::atoi( tokens[5].c_str() );
+
+    std::cout << "Input boss: " << *this << std::endl;
   } else {
     std::cout << "Formatting error in input: unrecognized syntax in line : " << line << std::endl;
     return; 
   }
-  checkPowers();
+
 }

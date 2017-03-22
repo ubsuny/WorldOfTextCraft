@@ -23,11 +23,13 @@ int main( int argc, char ** argv ) {
   bool success = true; 
 
   // Read the party configurations
+  std::cout << "reading PC configuration" << std::endl;
   success = battle.readPCConfiguration( argv[1] );
   if ( ! success ) {
     std::cout << "No PC configuration read" << std::endl;
     return 0;
   }
+  std::cout << "reading NPC configuration" << std::endl;
   success = battle.readNPCConfiguration( argv[2] );
   if ( ! success ) {
     std::cout << "No PC configuration read" << std::endl;
@@ -35,11 +37,13 @@ int main( int argc, char ** argv ) {
   }
 
   // Read a test sequence. 
+  std::cout << "reading NPC action script" << std::endl;
   success = battle.loadActionScript( argv[3] );
   if ( ! success ) {
     std::cout << "No NPC script read" << std::endl;
     return 0;
   }
+
 
   battle.splash();
   std::cout << "Are you ready to begin? [Y/n] " << std::endl;
