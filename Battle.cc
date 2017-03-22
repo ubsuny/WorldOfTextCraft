@@ -38,8 +38,7 @@ void Battle::splash( std::ostream & out ) const {
 
 bool Battle::readPCConfiguration( std::string filename )
 {
-  // Tell the Battle that we are scripted and not accepting info from users. 
-  scripted_=true;
+
   std::cout << "reading PC configuration" << std::endl;
   if ( pcs_.size() > 0 ) {
     std::cout << "Configuration already read... skipping reading from " << filename << std::endl;
@@ -134,6 +133,14 @@ bool Battle::loadActionScript( std::string filename )
       if ( line[0] == '!' || line == "" ) continue;
       QuickAction qa;
       success = parseAction( line, qa );
+
+      // If the script has any PC actions, it is scripted and not user-input
+      coll_type::iterator pcIt = std::find_if( pcs_.begin(), pcs_.end(), MatchSource( qa.source->name() ) );
+      bool found = pcIt != pcs_.end() ;
+      if ( found ) {
+	scripted_=true;
+	std::cout << "Scripting input for " << (*pcIt)->name() << std::endl;
+      }
       actions_.push_back(qa);
       if( !success ) {
 	std::cout << "Error in parseAction!" << std::endl;
@@ -237,6 +244,16 @@ bool Battle::performScriptedActions( ) {
     return false; 
   }
 
+  if ( !anyPCAlive() ){
+    std::cout << "Alas, your party is dead." << std::endl;
+    return false; 
+  }
+
+  if ( !anyNPCAlive() ) {
+    std::cout << "You already won! Hooray!" << std::endl;
+    return false; 
+  }
+
   // Special case for first attack : all NPCs will target first PC
   if ( turn_ == 0 && pcs_.size() > 1 ) {
     for ( coll_type::iterator inpc = npcs_.begin();
@@ -260,8 +277,6 @@ bool Battle::performScriptedActions( ) {
 
   for ( std::vector<QuickAction>::iterator it = actions_.begin();
 	it != actions_.end(); ++it ){
-
-    std::cout << it->source->name() << " is acting" << std::endl;
 
     if ( it->source->isDead() ) {
       std::cout << it->source->name() << " is dead" << std::endl;
@@ -293,21 +308,24 @@ bool Battle::performScriptedActions( ) {
       std::cout << "Incorrect action! Returning" << std::endl;
       return false; 
     }
+
+    if ( !anyPCAlive() ) {
+      std::cout << it->source->name() << " has vanquished your party." << std::endl;
+      return false; 
+    }
+
+
+    if ( !anyNPCAlive() ) {
+      std::cout << it->source->name() << " has vanquished your foe!!!" << std::endl;
+      return false; 
+    }
+
   }
 
-  // Check if either the NPCs or the PCs are dead:
-  bool anyPCAlive = false; 
-  for( coll_type::const_iterator pc = pcs_.begin(); pc != pcs_.end(); ++pc ) {
-    if ( (*pc)->isAlive() ) anyPCAlive = true; 
-  }
-  bool anyNPCAlive = false; 
-  for( coll_type::const_iterator npc = npcs_.begin(); npc != npcs_.end(); ++npc ) {
-    if ( (*npc)->isAlive() ) anyNPCAlive = true; 
-  }
 
   ++turn_; 
 
-  return anyPCAlive && anyNPCAlive; 
+  return anyPCAlive() && anyNPCAlive(); 
 
 }
 
@@ -318,6 +336,17 @@ bool Battle::performUserActions( std::istream & in ) {
 
   if ( scripted_ ) {
     std::cout << "PC actions already scripted, do not give me scripted actions if you do not want to use them." << std::endl;
+    return false; 
+  }
+
+
+  if ( !anyPCAlive() ){
+    std::cout << "Alas, your party is dead." << std::endl;
+    return false; 
+  }
+
+  if ( !anyNPCAlive() ) {
+    std::cout << "You already won! Hooray!" << std::endl;
     return false; 
   }
 
@@ -340,7 +369,6 @@ bool Battle::performUserActions( std::istream & in ) {
   for ( coll_type::iterator it = pcs_.begin(); it != pcs_.end(); ++it ) {
     (*it)->turn_ = turn_;
   }
-
 
   // Process the boss actions
   for ( std::vector<QuickAction>::iterator it = actions_.begin();
@@ -376,6 +404,13 @@ bool Battle::performUserActions( std::istream & in ) {
       std::cout << "Incorrect action! Returning" << std::endl;
       return false; 
     }
+
+
+    if ( !anyPCAlive() ) {
+      std::cout << it->source->name() << " has vanquished your party." << std::endl;
+      return false; 
+    }
+
   }
 
   // Process the user actions
@@ -391,11 +426,13 @@ bool Battle::performUserActions( std::istream & in ) {
     std::cout << "Action for " << (*it)->name() << ": " << std::endl;
     QuickAction qa;
     std::string line;
-    std::getline( in, line );
+    in >> line; 
+    //std::getline( in, line );
     bool success = parseAction( line, qa ); 
-    if ( !success ) {
-      std::cout << "Error processing line, exiting" << std::endl;
-      return false; 
+    while ( !success ) {
+      std::cout << "Invalid input, try again" << std::endl;
+      in >> line; 
+      success = parseAction( line, qa ); 
     }
     if ( qa.action ==  ATTACK ) {
       (*it)->attack();
@@ -408,25 +445,37 @@ bool Battle::performUserActions( std::istream & in ) {
       return false; 
     }
 
+
+    if ( !anyNPCAlive() ) {
+      std::cout << (*it)->name() << " has vanquished your foe." << std::endl;
+      return false; 
+    }
+
   }
 
-
-  // Check if either the NPCs or the PCs are dead:
-  bool anyPCAlive = false; 
-  for( coll_type::const_iterator pc = pcs_.begin(); pc != pcs_.end(); ++pc ) {
-    if ( (*pc)->isAlive() ) anyPCAlive = true; 
-  }
-  bool anyNPCAlive = false; 
-  for( coll_type::const_iterator npc = npcs_.begin(); npc != npcs_.end(); ++npc ) {
-    if ( (*npc)->isAlive() ) anyNPCAlive = true; 
-  }
 
   ++turn_; 
 
-  return anyPCAlive && anyNPCAlive; 
+  return anyPCAlive() && anyNPCAlive(); 
 
 }
 
+bool Battle::anyPCAlive() const {
+  bool anyPCAliveRet = false; 
+  for( coll_type::const_iterator pc = pcs_.begin(); pc != pcs_.end(); ++pc ) {
+    if ( (*pc)->isAlive() ) anyPCAliveRet = true; 
+  }
+  return anyPCAliveRet;
+}
+
+
+bool Battle::anyNPCAlive() const {
+  bool anyNPCAliveRet = false; 
+  for( coll_type::const_iterator npc = npcs_.begin(); npc != npcs_.end(); ++npc ) {
+    if ( (*npc)->isAlive() ) anyNPCAliveRet = true; 
+  }
+  return anyNPCAliveRet;
+}
 
 
 Battle::coll_type::iterator Battle::find_entity( std::string s )

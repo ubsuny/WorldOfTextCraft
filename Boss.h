@@ -53,8 +53,10 @@ class Boss : public Entity{
    // Overload the input method.
    virtual void input( std::string line );
 
+
  private :
    int multiAttackPower_;    // The attack power of a mob who can attack more than one opponent. 
+
 
 };
 

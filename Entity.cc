@@ -9,7 +9,8 @@ Entity::Entity( std::string className,
 		unsigned int attackPower,
 		unsigned int defensePower,
 		unsigned int healPower,
-		unsigned int maxMana
+		unsigned int maxMana,
+		bool check
 		):
   className_(className),
   name_(name),
@@ -20,8 +21,10 @@ Entity::Entity( std::string className,
   healPower_(healPower),
   target_(0) // uninitialized target
 {
-  // Check to make sure your powers aren't outrageous
-  checkPowers();
+  if ( check ){
+    // Check to make sure your powers aren't outrageous
+    checkPowers();
+  }
 }
 
 // Destructor
@@ -187,7 +190,7 @@ bool Entity::checkPowers() {
 
   isMagicUser_ = ( mana_ > 0);
   if ( attackPower_ + defensePower_ + healPower_ > 20 ) {
-    std::cout << "You cannot godmode here, your abilities can only sum to 20." << std::endl
+    std::cout << name_ <<  " : You cannot godmode here, your abilities can only sum to 20." << std::endl
 	      << "To punish you, the gods set your hitpoints to 1 and make you feeble as a kitten." << std::endl;
     hitPoints_ = 1;
     attackPower_ = 0;
@@ -196,7 +199,7 @@ bool Entity::checkPowers() {
     return false; 
   }
   if ( attackPower_ < 0 || defensePower_ < 0 || healPower_ < 0 ) {
-    std::cout << "Your powers cannot be negative." << std::endl
+    std::cout << name_ <<  " : Your powers cannot be negative." << std::endl
 	      << "To punish you, the gods set your hitpoints to 1 and make you feeble as a kitten." << std::endl;
     hitPoints_ = 1;
     attackPower_ = 0;

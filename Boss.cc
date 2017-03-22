@@ -3,7 +3,7 @@
 #include <iomanip>
 
 Boss::Boss( std::string name, int attackPower, int healPower, int defensePower, int mana, int multiAttackPower ) :
-  Entity( "Boss", name, attackPower, healPower, defensePower, mana) {
+  Entity( "Boss", name, attackPower, healPower, defensePower, mana, false) {
   multiAttackPower_ = multiAttackPower; 
 };
 

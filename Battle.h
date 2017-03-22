@@ -185,7 +185,8 @@ class Battle {
   // in the format "source;action;target;"
   bool parseAction( std::string, QuickAction & qa );
   
-
+  bool anyNPCAlive() const;
+  bool anyPCAlive() const;
 
 };
 

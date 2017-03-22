@@ -50,7 +50,8 @@ class Entity {
 	  unsigned int attackPower,
 	  unsigned int healPower,
 	  unsigned int defensePower,
-	  unsigned int maxMana = 0
+	  unsigned int maxMana = 0,
+	  bool check=true
 	 );
   virtual ~Entity();
 
