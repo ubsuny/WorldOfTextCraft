@@ -3,7 +3,7 @@
 CXX=g++
 # Hey!, I am comment number 2. I want to say that CXXFLAGS will be the
 # options I'll pass to the compiler.
-CXX_FLAGS=-Wall -std=c++0x
+CXX_FLAGS=-Wall -std=c++11
 
 
 EXEC_SRC = test_entity.cc test_boss.cc test_battle.cc WorldOfTextCraft.cc

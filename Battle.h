@@ -87,6 +87,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <memory>
+#include <algorithm>
 #include "Entity.h"
 #include "Boss.h"
 #include "Warrior.h"
