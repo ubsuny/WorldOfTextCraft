@@ -407,7 +407,6 @@ bool Battle::performUserActions( std::istream & in ) {
 	}
 	continue;
       }
-      std::cout << "Boss target dead?" << boss->getTarget()->isDead() << std::endl;
       // If the target is dead, switch to the next in the list.
       if ( boss->getTarget() != 0 && boss->getTarget()->isDead() ) {
 	bool bossGotTarget = setBossTarget( boss );
