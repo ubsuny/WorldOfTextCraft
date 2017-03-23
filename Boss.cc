@@ -2,8 +2,8 @@
 #include <sstream>
 #include <iomanip>
 
-Boss::Boss( std::string name, int attackPower, int healPower, int defensePower, int mana, int multiAttackPower ) :
-  Entity( "Boss", name, attackPower, healPower, defensePower, mana, false) {
+Boss::Boss( std::string name, int attackPower, int defensePower, int healPower, int mana, int multiAttackPower ) :
+  Entity( "Boss", name, attackPower, defensePower, healPower, mana, false) {
   multiAttackPower_ = multiAttackPower; 
   hitPoints_ = 500;
 };
