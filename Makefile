@@ -30,7 +30,7 @@ WorldOfTextCraft: $(OBJECTS) WorldOfTextCraft.cc
 
 
 # To obtain object files
-%.o: %.cc $(SRCS) $(wildcard *.h)
+%.o: %.cc
 	$(CXX) $(CXX_FLAGS) -c  $< -o $@
 
 # To remove generated files
