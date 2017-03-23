@@ -190,6 +190,10 @@ class Battle {
   bool anyNPCAlive() const;
   bool anyPCAlive() const;
 
+  // Check if the Boss's target is dead. If so, set to the first living member
+  // of the party. Otherwise, return false; 
+  bool setBossTarget( Boss * boss );
+
 };
 
 

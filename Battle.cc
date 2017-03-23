@@ -286,23 +286,34 @@ bool Battle::performScriptedActions( ) {
       std::cout << it->source->name() << " is dead" << std::endl;
       continue; 
     }
-    // First check the special case of the "Boss" ability to attack everyone.
+
+    // two special cases for bosses: 
+    // 1. If their target dies, they pick the next target. 
+    // 2. Must check the special case of the "Boss" ability to attack everyone.
     // Since we are storing pointers to the base class, we need to 
     // "dynamic_cast" to the derived class to access its "multi attack"
-    if ( it->action == MULTIATTACK ) {
-      Boss * boss = dynamic_cast<Boss *> (it->source.get()); 
-      if ( boss == 0 ) {
-	std::cout << it->source->name() << " is not a boss." << std::endl;
-	return false; 
-      } else {
+    Boss * boss = dynamic_cast<Boss *> (it->source.get()); 
+    if ( boss != 0 ) {
+      // Attack the entire party in a "MultiAttack"
+      if ( it->action == MULTIATTACK ) {	
 	for ( coll_type::iterator itarget = pcs_.begin();
 	      itarget != pcs_.end(); ++itarget ) {
 	  boss->multiAttack( itarget->get() );
 	}
 	continue;
       }
+      std::cout << "Boss target dead?" << boss->getTarget()->isDead() << std::endl;
+      // If the target is dead, switch to the next in the list.
+      if ( boss->getTarget() != 0 && boss->getTarget()->isDead() ) {
+	bool bossGotTarget = setBossTarget( boss );
+	if ( !bossGotTarget ) {
+	  return false; 
+	}
+      }
+    }
 
-    }  else if ( it->action ==  ATTACK ) {
+    // Now we execute normal attacks. 
+    if ( it->action ==  ATTACK ) {
       it->source->attack();
     } else if ( it->action ==  HEAL  ) {
       it->source->heal();
@@ -382,23 +393,32 @@ bool Battle::performUserActions( std::istream & in ) {
       std::cout << it->source->name() << " is dead" << std::endl;
       continue; 
     }
-    // First check the special case of the "Boss" ability to attack everyone.
+    // two special cases for bosses: 
+    // 1. If their target dies, they pick the next target. 
+    // 2. Must check the special case of the "Boss" ability to attack everyone.
     // Since we are storing pointers to the base class, we need to 
     // "dynamic_cast" to the derived class to access its "multi attack"
-    if ( it->action == MULTIATTACK ) {
-      Boss * boss = dynamic_cast<Boss *> (it->source.get()); 
-      if ( boss == 0 ) {
-	std::cout << it->source->name() << " is not a boss." << std::endl;
-	return false; 
-      } else {
+    Boss * boss = dynamic_cast<Boss *> (it->source.get()); 
+    if ( boss != 0 ) {
+      // Attack the entire party in a "MultiAttack"
+      if ( it->action == MULTIATTACK ) {	
 	for ( coll_type::iterator itarget = pcs_.begin();
 	      itarget != pcs_.end(); ++itarget ) {
 	  boss->multiAttack( itarget->get() );
 	}
 	continue;
       }
+      std::cout << "Boss target dead?" << boss->getTarget()->isDead() << std::endl;
+      // If the target is dead, switch to the next in the list.
+      if ( boss->getTarget() != 0 && boss->getTarget()->isDead() ) {
+	bool bossGotTarget = setBossTarget( boss );
+	if ( !bossGotTarget ) {
+	  return false; 
+	}
+      }
+    }
 
-    }  else if ( it->action ==  ATTACK ) {
+    if ( it->action ==  ATTACK ) {
       it->source->attack();
     } else if ( it->action ==  HEAL  ) {
       it->source->heal();
@@ -461,6 +481,31 @@ bool Battle::performUserActions( std::istream & in ) {
   ++turn_; 
 
   return anyPCAlive() && anyNPCAlive(); 
+
+}
+
+// Set the next Boss target. It looks for the
+// first character, in order, that is not dead. 
+bool Battle::setBossTarget( Boss * boss ) {
+
+  Entity const * entity = boss->getTarget();
+ 
+  if ( boss == 0 ) {
+    std::cout << "Boss is zero, cannot set new target" << std::endl;
+    return false; 
+  }
+  for( coll_type::const_iterator pc = pcs_.begin(); pc != pcs_.end(); ++pc ) {
+    if ( (*pc)->isAlive() ) {
+      if ( pc->get() != entity  ){
+	std::cout << boss->name() << " shifts their attacks to " << (*pc)->name() << std::endl;
+      }
+      boss->setTarget( pc->get() );
+      return true;
+    }
+  }
+
+  // Here there are no targets alive.
+  return false; 
 
 }
 
