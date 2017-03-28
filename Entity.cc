@@ -108,12 +108,27 @@ int Entity::reduceHitPoints( int attack ) {
 }
 
 // Increase the hit points of "this" entity
+// Fixed to include capability to heal boss, but up to max 500 hp
+// ^^ ONLY works for bosses
+
 int Entity::increaseHitPoints( int heal ) { 
-  this->hitPoints_ += heal; 
-  if (this->hitPoints_ > 100 ) {
-    this->hitPoints_ = 100; 
-  }
-  return this->hitPoints_; 
+  if ( className() == "Boss" ) {
+
+    this->hitPoints_ += heal; 
+    if (this->hitPoints_ > 500 ) {
+      this->hitPoints_ = 500; 
+    }
+    return this->hitPoints_;
+
+  } else {
+
+    this->hitPoints_ += heal; 
+    if (this->hitPoints_ > 100 ) {
+      this->hitPoints_ = 100; 
+    }
+    return this->hitPoints_;
+
+  } 
 }
 
 
