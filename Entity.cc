@@ -15,6 +15,7 @@ Entity::Entity( std::string className,
   className_(className),
   name_(name),
   hitPoints_(100),
+  maxHitPoints_(100),
   mana_(maxMana),
   attackPower_(attackPower),
   defensePower_(defensePower),
@@ -110,8 +111,8 @@ int Entity::reduceHitPoints( int attack ) {
 // Increase the hit points of "this" entity
 int Entity::increaseHitPoints( int heal ) { 
   this->hitPoints_ += heal; 
-  if (this->hitPoints_ > 100 ) {
-    this->hitPoints_ = 100; 
+  if (this->hitPoints_ > this->maxHitPoints_ ) {
+    this->hitPoints_ = this->maxHitPoints_; 
   }
   return this->hitPoints_; 
 }

@@ -112,6 +112,7 @@ class Entity {
   std::string name_;       // Name of this particular entity (like, Lothar the Great)
   int isMagicUser_;        // Can this user use magic? 
   int hitPoints_;          // Number of hit points left.
+  int maxHitPoints_;       // Maximum number of hit points possible 
   int mana_;               // Number of magical "mana" points are left to perform magic
   int attackPower_;        // Number of hit points inflicted if I attack
   int defensePower_;       // Number of hit points mitigated if someone attacks ME

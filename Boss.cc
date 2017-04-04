@@ -6,6 +6,7 @@ Boss::Boss( std::string name, int attackPower, int defensePower, int healPower, 
   Entity( "Boss", name, attackPower, defensePower, healPower, mana, false) {
   multiAttackPower_ = multiAttackPower; 
   hitPoints_ = 500;
+  maxHitPoints_ = 500;
 };
 
 
