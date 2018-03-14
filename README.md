@@ -19,16 +19,20 @@ to create three executables:
 In order to compile just type "make". 
 
 
-## PHY410/505 on SENS cluster
+## PHY410/505 at UB
 
-For PHY410/505 students working on the SENS cluster at UB, do this:
+For PHY410/505 students working on the SENS cluster at UB, do this first (for VIDIA users, you do not need to do this):
 
 ```
 > use devtoolset-2
+```
+
+Then get the code and compile it:
+
+```
 > git clone git@github.com:rappoccio/WorldOfTextCraft.git
 > cd WorldOfTextCraft
 > make
-> ./WorldOfTextCraft player_config boss_config boss_script
 ```
 
 ## Usage
@@ -43,6 +47,12 @@ Here, we have:
 - boss_script : the script of moves the boss will execute
 
 
+
+For instance:
+
+```
+./WorldOfTextCraft AshenVerdict.txt Arthas.txt ArthasAttacks.txt
+```
 
 ## Syntax
 
