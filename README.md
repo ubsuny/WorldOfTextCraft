@@ -21,19 +21,53 @@ In order to compile just type "make".
 
 ## PHY410/505 at UB
 
-For PHY410/505 students working on the SENS cluster at UB, do this first (for VIDIA users, you do not need to do this):
+### SENS
+For PHY410/505 students working on the SENS cluster at UB:
 
 ```
 > use devtoolset-2
+> git clone git@github.com:rappoccio/WorldOfTextCraft.git
+> cd WorldOfTextCraft
+> make
 ```
 
-Then get the code and compile it:
+### VIDIA 
 
 ```
 > git clone git@github.com:rappoccio/WorldOfTextCraft.git
 > cd WorldOfTextCraft
 > make
 ```
+
+### Docker image
+
+If you are using the [CompPhys](https://github.com/rappoccio/CompPhys)
+package and the
+[docker image](https://hub.docker.com/r/srappoccio/compphys) you
+should add this to the `results` folder **in your host OS**:
+
+```
+> cd /your/working/directory/results
+> git clone git@github.com:rappoccio/WorldOfTextCraft.git
+```
+
+Then go to your `CompPhys` folder:
+
+```
+> cd /your/working/directory/CompPhys
+> ./runDocker.sh srappoccio/compphys:latest 1
+```
+
+This will launch the docker image, so you will be in the `/results`
+folder in docker. You can then:
+
+
+```
+> cd WorldOfTextCraft
+> make
+```
+
+
 
 ## Usage
 
@@ -245,3 +279,101 @@ Action for Fordring:
 
 You can then cycle through until your party is victorious (the Boss dies), or fails (all of you die). Then the scenario ends. To exit prematurely, simply "control-C" out. 
 
+## Battle Log
+
+The C++ game will create a log of actions in a
+[JSON](https://www.json.org) format. This will look something like:
+
+```
+    {"Turns":[                         # Name of the entire structure ("Turns")
+    {"Turn":0,                         # This turn number (0)
+    "Arthas":{"Attacks":[10,0,8,8],    # "Name of attacker":{ "action":[values for action],...}
+    "Defends":[0],
+    "Heals":[0],
+    "DamageReceived":[20],
+    "HealingRecieved":[0]
+    },
+    "Fordring":{"Attacks":[0],         # "Name of next attacker":{ "action":[values for action],...}
+    "Defends":[10],
+    "Heals":[0],
+    "DamageReceived":[10,0],
+    "HealingRecieved":[0]
+    },
+    "Thrall":{"Attacks":[0],           # and so on
+    "Defends":[0],
+    "Heals":[8],
+    "DamageReceived":[8],
+    "HealingRecieved":[0]
+    },
+    "Mograine":{"Attacks":[20],
+    "Defends":[0],
+    "Heals":[0],
+    "DamageReceived":[8],
+    "HealingRecieved":[8]
+    }
+    },
+    {"Turn":1,                       # Next turn, and so on. 
+    ...
+    }
+    }
+```
+
+There is a script `readbattle.py` that will parse this JSON file and
+put the data into a `numpy ndarray`. If you set the `--verbose` flag
+on the command line, it will also print a table that looks more
+columnar like this, with the column headings printed on top: 
+
+```
+['Attacks', 'Defends', 'Heals', 'DamageReceived', 'HealingRecieved']
+------------ turn :  0  ---------------
+====     Arthas : 26,  0,  0, 20,  0,
+====   Fordring :  0, 10,  0, 10,  0,
+====     Thrall :  0,  0,  8,  8,  0,
+====   Mograine : 20,  0,  0,  8,  8,
+------------ turn :  1  ---------------
+====     Arthas : 26,  0,  0, 20,  0,
+====   Fordring :  0, 10,  0, 10,  0,
+====     Thrall :  0,  0,  8,  8,  0,
+====   Mograine : 20,  0,  0,  8,  8,
+...
+
+```
+
+The `numpy` array looks like:
+
+```
+[[[26.  0.  0. 20.  0.]             <--- Character 0 (in this case, Arthas)
+  [26.  0.  0. 20.  0.]
+  [26.  0.  0. 20.  0.]
+  [26.  0.  0. 20.  0.]
+  [26.  0.  0. 20.  0.]
+  [26.  0.  0. 20.  0.]
+  [26.  0.  0. 20.  0.]
+  [26.  0.  0. 20.  0.]
+  [26.  0.  0. 20.  0.]
+  [26.  0.  0. 20.  0.]
+  [28.  0.  0. 20.  0.]
+  [28.  0.  0. 20.  0.]
+  [28.  0.  0. 20.  0.]
+  [28.  0.  0. 20.  0.]]
+
+ [[ 0. 10.  0. 10.  0.]            <--- Character 1 (in this case, Fordring)
+  [ 0. 10.  0. 10.  0.]
+  [ 0. 10.  0. 10.  0.]
+  [ 0. 10.  0. 10.  0.]
+  [ 0. 10.  0. 10.  0.]
+  [ 0. 10.  0. 10.  0.]
+  [ 0. 10.  0. 10.  0.]
+  [ 0. 10.  0. 10.  0.]
+  [ 0. 10.  0. 10.  0.]
+  [ 0.  0.  0. 10.  0.]
+  [ 0.  0.  0.  0.  0.]
+  [ 0.  0.  0.  0.  0.]
+  [ 0.  0.  0.  0.  0.]
+  [ 0.  0.  0.  0.  0.]]
+
+...
+```
+
+The output array is called `npdata` and can be used for various
+analysis purposes. 
