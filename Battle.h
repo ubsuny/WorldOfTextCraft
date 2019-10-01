@@ -143,6 +143,9 @@ class Battle {
 
   // Print the splash screen
   void splash( std::ostream & out = std::cout ) const;
+
+  // Print the logfile of the battle
+  void printLog( std::ostream & out) const; 
   
  private:
 

@@ -10,7 +10,7 @@
 int main( int argc, char ** argv ) {
 
   if ( argc < 4 ) {
-    std::cout << "Usage : " << argv[0] << " player_config boss_config boss_script " << std::endl;
+    std::cout << "Usage : " << argv[0] << " player_config boss_config boss_script   [optional: logfile]" << std::endl;
     return 0; 
   }
 
@@ -68,6 +68,10 @@ int main( int argc, char ** argv ) {
 
   }
 
+  std::string logname = (argc >= 5) ? argv[4] : "battlelog.txt";
+  std::ofstream logfile(logname);
+  battle.printLog(logfile); 
+  
 
   std::cout << "   ___                _ _                  _ " << std::endl;
   std::cout << "  / _ \\___   ___   __| | |__  _   _  ___  / \\" << std::endl;

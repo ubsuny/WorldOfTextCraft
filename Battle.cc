@@ -594,3 +594,33 @@ void Battle::printActions( std::ostream & out ) {
   }
 
 }
+
+
+void Battle::printLog( std::ostream & out ) const
+{
+
+  out << "{\"Turns\":[" << std::endl;
+  for ( unsigned int iturn = 0; iturn < turn_; ++iturn ){
+
+    out << "{\"Turn\":" << iturn << "," << std::endl;
+
+    for ( auto i = npcs_.begin(); i != npcs_.end(); ++i ){
+      (*i)->printActions(out, iturn);
+      out << "," << std::endl;
+    }
+    for ( auto i = pcs_.begin(); i != pcs_.end(); ++i ){
+      (*i)->printActions(out, iturn);
+      // json does not like trailing commas
+      if ( i != pcs_.end() - 1)
+	out << "," << std::endl;
+      else
+	out << std::endl;
+    }
+    out << "}";
+    if ( iturn + 1 != turn_ )
+      out << "," << std::endl;
+    else
+      out << std::endl;
+  }
+  out << "]}" << std::endl;
+}

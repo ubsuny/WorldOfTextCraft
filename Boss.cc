@@ -22,8 +22,11 @@ int Boss::multiAttack( Entity * other ) {
 
   if ( getTarget() != 0 ) {
     std::cout << name() << " multi-attacks " << getTarget()->name() << " with attack power " << ap<< std::endl;
-    bool retval = getTarget()->reduceHitPoints( ap );
+    int retval = getTarget()->reduceHitPoints( ap );
     setTarget(originalTarget);
+    if ( myAttacks_.find(turn_) == myAttacks_.end() )
+      myAttacks_[turn_] = action_vector(); 
+    myAttacks_[turn_].push_back(retval);
     return retval;
   } else {
     std::cout << name_ << " does not have a target to attack." << std::endl;

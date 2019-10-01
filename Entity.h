@@ -3,7 +3,8 @@
 
 #include <iostream>
 #include <fstream>
-
+#include <map>
+#include <vector>
 
 // --------------------------------------
 /*  ______       _   _ _          */
@@ -59,6 +60,9 @@ class Entity {
   // It will perform turn-based actions. 
   friend class Battle;
 
+  // For recording actions
+  typedef std::vector<int>                          action_vector; 
+  typedef std::map< unsigned int, action_vector >   action_map;
 
   // All of these default to "do nothing" and should be overriden in the derived classes. 
   virtual int attack( Entity * target=0 );
@@ -106,8 +110,17 @@ class Entity {
   Entity * getTarget( void ) {  return target_; }
 
 
- protected :
+  action_map const & myAttacks()            const { return myAttacks_;}
+  action_map const & myDefends()            const { return myDefends_;}
+  action_map const & myHeals()              const { return myHeals_;}
+  action_map const & myReducedHitPoints()   const { return myReducedHitPoints_;}
+  action_map const & myIncreasedHitPoints() const { return myIncreasedHitPoints_;}
 
+  // Print the actions in a json format for turn "iturn". 
+  void printActions(std::ostream & out, unsigned int iturn) const; 
+  
+ protected :
+  unsigned int turn_;      // Turn that "this" Entity is on.
   std::string className_;  // Name of this class (like, Warrior or Druid or Rogue)
   std::string name_;       // Name of this particular entity (like, Lothar the Great)
   int isMagicUser_;        // Can this user use magic? 
@@ -132,10 +145,14 @@ class Entity {
   int defaultHeal  ( Entity * target = 0);
   int defaultDefend( Entity * target = 0);
 
- private: 
-  
 
-  unsigned int turn_; // Turn that "this" Entity is on.
+  action_map myAttacks_;
+  action_map myDefends_;
+  action_map myHeals_;
+  action_map myReducedHitPoints_;
+  action_map myIncreasedHitPoints_; 
+  
+  
 };
 
 #endif

@@ -2,6 +2,8 @@
 #include <iomanip> 
 #include <vector>
 #include <sstream>
+#include <iterator>
+#include <algorithm>
 
 // Constructor
 Entity::Entity( std::string className,
@@ -96,25 +98,33 @@ void Entity::printStats( std::ostream & out) const {
 
 // Reduce the hit points of "this" entity by "attack", mitigated by "defensePower"
 int Entity::reduceHitPoints( int attack ) {  
-  int diff = (attack - this->defensePower_);
+  int diff = (attack - defensePower_);
   if ( diff < 0 )
     diff = 0;
-  std::cout << name_ << " loses " << diff << " hit points after attack " << attack << " and defense " << this->defensePower_ << std::endl;
-  this->hitPoints_ -= diff;
-  if (this->hitPoints_ <= 0) {
-    this->hitPoints_ = 0; 
+  else if ( diff >= hitPoints_)  // Protect against "overkill" in the stats accounting. 
+    diff = hitPoints_;  
+  std::cout << name_ << " loses " << diff << " hit points after attack " << attack << " and defense " << defensePower_ << std::endl;
+  hitPoints_ -= diff;
+  if (hitPoints_ <= 0) {
+    hitPoints_ = 0; 
     std::cout << name_ << ", the brave " << className_ << ", has died." << std::endl;
   }
-  return this->hitPoints_; 
+  if ( myReducedHitPoints_.find(turn_) == myReducedHitPoints_.end() )
+    myReducedHitPoints_[turn_] = action_vector();
+  myReducedHitPoints_[turn_].push_back(diff); 
+  return diff; 
 }
 
 // Increase the hit points of "this" entity
-int Entity::increaseHitPoints( int heal ) { 
-  this->hitPoints_ += heal; 
-  if (this->hitPoints_ > this->maxHitPoints_ ) {
-    this->hitPoints_ = this->maxHitPoints_; 
-  }
-  return this->hitPoints_; 
+int Entity::increaseHitPoints( int heal ) {
+  int healed = heal;       // Protect against "overheal" in the stats accounting. 
+  if ( hitPoints() + healed >= maxHitPoints_)
+    healed = maxHitPoints_ - hitPoints();
+  hitPoints_ += healed;
+  if ( myIncreasedHitPoints_.find(turn_) == myIncreasedHitPoints_.end() )
+    myIncreasedHitPoints_[turn_] = action_vector();
+  myIncreasedHitPoints_[turn_].push_back(healed); 
+  return healed; 
 }
 
 
@@ -129,11 +139,14 @@ int Entity::defaultDefend( Entity * other ) {
       std::cout << name_ << " : target " << getTarget()->name() << " is already dead." << std::endl;
       return 0;
     }
-    std::cout << name_ << " defends against " << getTarget()->name() << ", defense mitigation " << defensePower() << std::endl;
+    std::cout << name_ << " defends against " << getTarget()->name() << " with defense mitigation " << defensePower() << std::endl;
     getTarget()->setTarget(this);
   } else {
     std::cout << name_ << " does not have a target to defend." << std::endl;
   }
+  if ( myDefends_.find(turn_) == myDefends_.end() )
+    myDefends_[turn_] = action_vector();  
+  myDefends_[turn_].push_back( defensePower() );
   return 0;     
 }
 
@@ -153,10 +166,13 @@ int Entity::defaultHeal( Entity * other ) {
       std::cout << name_ << " : target " << getTarget()->name() << " is already dead." << std::endl;
       return 0;
     }
-
-    std::cout << name() << " heals " << getTarget()->name() << " for " << healPower() << std::endl;
     mana_ -= 10;
-    return getTarget()->increaseHitPoints( this->healPower_ );
+    auto healed = getTarget()->increaseHitPoints( healPower_ );
+    std::cout << name() << " heals " << getTarget()->name() << " with heal power " << healPower_ << " for " << healed << std::endl;
+    if ( myHeals_.find(turn_) == myHeals_.end() )
+      myHeals_[turn_] = action_vector(); 
+    myHeals_[turn_].push_back( healed ); 
+    return healed;
   }
   else {
     std::cout << name_ << " does not have a target to heal." << std::endl;
@@ -177,9 +193,13 @@ int Entity::defaultAttack( Entity * other ) {
       return 0;
     }
 
-    int ap = this->attackPower_;
-    std::cout << name() << " attacks " << getTarget()->name() << " with attack power " << ap << std::endl;
-    return getTarget()->reduceHitPoints( ap );
+    int ap = attackPower_;
+    auto attacked = getTarget()->reduceHitPoints( ap );
+    std::cout << name() << " attacks " << getTarget()->name() << " with attack power " << ap << " for damage " << attacked << std::endl;
+    if ( myAttacks_.find(turn_) == myAttacks_.end() )
+      myAttacks_[turn_] = action_vector(); 
+    myAttacks_[turn_].push_back( attacked );
+    return attacked;
   } else {
     std::cout << name_ << " does not have a target to attack." << std::endl;
     return 0;
@@ -215,3 +235,47 @@ bool Entity::checkPowers() {
 // Some operators to support << and >>
 std::ostream & operator<<( std::ostream & out, Entity const & e){ e.print(out); return out; }
 std::istream & operator>>( std::istream & in, Entity & e) {e.input(in); return in;}
+
+
+
+
+
+
+void Entity::printActions(std::ostream & out, unsigned int iturn) const {
+
+  auto allactions = {
+    std::make_pair( "Attacks", &myAttacks_ ),
+    std::make_pair( "Defends", &myDefends_ ),
+    std::make_pair( "Heals", &myHeals_ ),
+    std::make_pair( "DamageReceived", &myReducedHitPoints_ ),
+    std::make_pair( "HealingRecieved", &myIncreasedHitPoints_ )
+  };
+
+  out << "\"" << name_ << "\":{";
+  for ( auto iaction = allactions.begin(); iaction != allactions.end(); ++iaction){
+    auto actionname = iaction->first;
+    auto actions = iaction->second;
+    out << "\"" << actionname << "\":[";
+    
+    // Check if there are any actions for this turn
+    auto p_action = actions->find(iturn);
+    if ( p_action != actions->end() ){
+      auto actionvals = p_action->second;
+      for ( auto ival = actionvals.begin(); ival != actionvals.end(); ++ival ){
+	out << *ival;
+	// json does not like trailing comma
+	if ( ival + 1 != actionvals.end() )
+	  out << ",";
+      }
+    } else {
+      out << 0;
+    }
+    out << "]";
+
+    if ( iaction != allactions.end() - 1 ){
+      out << ",";
+    }
+    out << std::endl;
+  }
+  out << "}";  
+}
