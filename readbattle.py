@@ -2,7 +2,7 @@ import json
 import numpy as np
 import argparse
 
-def readbattle(infile, verbose=True):
+def readbattle(infile, verbose=False):
     '''
     Description: script to read the battle log for WorldOfTextCraft. 
     The battle log is in JSON format, and this script prints
