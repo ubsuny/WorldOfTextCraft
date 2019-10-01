@@ -600,7 +600,7 @@ void Battle::printLog( std::ostream & out ) const
 {
 
   out << "{\"Turns\":[" << std::endl;
-  for ( unsigned int iturn = 0; iturn < turn_; ++iturn ){
+  for ( unsigned int iturn = 0; iturn <= turn_; ++iturn ){
 
     out << "{\"Turn\":" << iturn << "," << std::endl;
 
@@ -617,7 +617,7 @@ void Battle::printLog( std::ostream & out ) const
 	out << std::endl;
     }
     out << "}";
-    if ( iturn + 1 != turn_ )
+    if ( iturn != turn_ )
       out << "," << std::endl;
     else
       out << std::endl;

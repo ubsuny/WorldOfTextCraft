@@ -32,6 +32,12 @@
 //  int healPower_;          // Number of hit points to heal
 //  Entity * target_;        // This Entity's current target for action
 //
+// These will store the history of the results of various actions
+//  action_map myAttacks_;
+//  action_map myDefends_;
+//  action_map myHeals_;
+//  action_map myReducedHitPoints_;
+//  action_map myIncreasedHitPoints_; 
 //
 // The interface should be written in the base classes:
 //  Attack a target:        virtual int attack( Entity * target=0 );
@@ -109,7 +115,7 @@ class Entity {
   // Get my current target
   Entity * getTarget( void ) {  return target_; }
 
-
+  // These will store the history of the results of various actions
   action_map const & myAttacks()            const { return myAttacks_;}
   action_map const & myDefends()            const { return myDefends_;}
   action_map const & myHeals()              const { return myHeals_;}
@@ -145,7 +151,7 @@ class Entity {
   int defaultHeal  ( Entity * target = 0);
   int defaultDefend( Entity * target = 0);
 
-
+  // These will store the history of the results of various actions
   action_map myAttacks_;
   action_map myDefends_;
   action_map myHeals_;

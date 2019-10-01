@@ -164,11 +164,12 @@ int Entity::defaultHeal( Entity * other ) {
 
     if ( getTarget()->isDead() ) {
       std::cout << name_ << " : target " << getTarget()->name() << " is already dead." << std::endl;
+      myHeals_[turn_].push_back(0); 
       return 0;
     }
     mana_ -= 10;
-    auto healed = getTarget()->increaseHitPoints( healPower_ );
-    std::cout << name() << " heals " << getTarget()->name() << " with heal power " << healPower_ << " for " << healed << std::endl;
+    auto healed = getTarget()->increaseHitPoints( healPower_ ); 
+    std::cout << name() << " healed " << getTarget()->name() << " with heal power " << healPower_ << " for " << healed << std::endl;       
     if ( myHeals_.find(turn_) == myHeals_.end() )
       myHeals_[turn_] = action_vector(); 
     myHeals_[turn_].push_back( healed ); 
@@ -190,18 +191,20 @@ int Entity::defaultAttack( Entity * other ) {
   if ( getTarget() != 0 ) {
     if ( getTarget()->isDead() ) {
       std::cout << name_ << " : target " << getTarget()->name() << " is already dead." << std::endl;
+      myAttacks_[turn_].push_back( 0 ); 
       return 0;
     }
 
     int ap = attackPower_;
     auto attacked = getTarget()->reduceHitPoints( ap );
-    std::cout << name() << " attacks " << getTarget()->name() << " with attack power " << ap << " for damage " << attacked << std::endl;
+    std::cout << name() << " attacked " << getTarget()->name() << " with attack power " << ap << " for damage " << attacked << std::endl;
     if ( myAttacks_.find(turn_) == myAttacks_.end() )
       myAttacks_[turn_] = action_vector(); 
     myAttacks_[turn_].push_back( attacked );
     return attacked;
   } else {
     std::cout << name_ << " does not have a target to attack." << std::endl;
+    myAttacks_[turn_].push_back( 0 ); 
     return 0;
   }
 };
