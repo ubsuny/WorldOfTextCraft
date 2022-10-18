@@ -20,8 +20,12 @@ jobs:
         repository : ubsuny/WorldOfTextCraftInputsFall2022 
         ref: main
         path: './WorldOfTextCraftInputsFall2022'
+    - name: catit
+      run: cat WorldOfTextCraftInputsFall2022/problem1_inputs.txt     
     - name: make
       run: make
+    - name : run_none
+      run: ./WorldOfTextCraft
     - name: run
-      run: cat WorldOfTextCraftInputsFall2022\problem1_inputs.txt |  ./WorldOfTextCraft ThreeStooges.txt Shemp.txt ShempAttacks.txt
+      run: cat WorldOfTextCraftInputsFall2022/problem1_inputs.txt |  ./WorldOfTextCraft ThreeStooges.txt Shemp.txt ShempAttacks.txt
 
