@@ -46,7 +46,7 @@ void Entity::input( std::string line )
   for (std::string each=""; std::getline(linestream, each, ';'); ){
     tokens.push_back(each);
   }
-  if ( tokens.size() == 4 ) {
+  if ( tokens.size() >= 4 ) {
     name_ = tokens[0];
     attackPower_ = std::atoi( tokens[1].c_str() );
     defensePower_ = std::atoi( tokens[2].c_str()  );

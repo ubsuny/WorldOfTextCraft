@@ -177,7 +177,7 @@ bool Battle::parseAction(std::string line, QuickAction & qa)
     tokens.push_back(each);
   }
 
-  if ( tokens.size() != 3 ) {
+  if ( tokens.size() < 3 ) {
     std::cout << "Improper formatting of line " << line << std::endl;
     return false; 
   } 
