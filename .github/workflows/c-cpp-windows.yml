@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: C/C++ CI - Windows
 
 on:
   push:
@@ -23,6 +23,5 @@ jobs:
     - name: make
       run: make
     - name: run
-      run: |
-        Start-Process ".\WorldOfTextCraft ThreeStooges.txt Shemp.txt ShempAttacks.txt" -RedirectStandardInput ".\WorldOfTextCraftInputsFall2022\problem1_inputs.txt" -NoNewWindow -Wait
-      shell: cmd
+      run: cat WorldOfTextCraftInputsFall2022\problem1_inputs.txt |  ./WorldOfTextCraft ThreeStooges.txt Shemp.txt ShempAttacks.txt
+
