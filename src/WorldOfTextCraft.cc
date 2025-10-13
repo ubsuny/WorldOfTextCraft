@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include "Character.h"
 
 #include "Warrior.h"
 #include "Rogue.h"

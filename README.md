@@ -1,13 +1,13 @@
 # WorldOfTextCraft
 This is a trivial turn-based role-playing fighting game, designed to teach C++.
 
-Apologies to Blizzard Entertainment and the Three Stooges for cribbing (and butchering) their content.
+Apologies to Blizzard Entertainment for cribbing (and butchering) their content.
 
 The goal was to make this "bare bones" without a complicated build so people can see for themselves what is involved in the software.
 This does require C++11 because of the use of a `vector< shared_ptr<T> >` for memory management.
 There is a very trivial Makefile to create three executables:
 
-- **test_entity**: test the base fighting class functionality
+- **test_character**: test the base fighting class functionality
 - **test_boss**: test the boss functionality
 - **test_battle**: test a pre-scripted battle
 - **WorldOfTextCraft**: the actual text-based RPG.
@@ -83,7 +83,7 @@ In all syntax files, lines starting with "!" will be ignored (i.e. comments)
   ! Test party configuration:
   ! Warrior, Rogue, Priest
   ! Fields are :
-  ! name, entity type, attack power, heal power, defense power
+  ! name, character type, attack power, heal power, defense power
   Rogue;Curly;20;0;0;
   Priest;Larry;0;0;8;
   Warrior;Moe;0;3;0;
@@ -131,7 +131,7 @@ In all syntax files, lines starting with "!" will be ignored (i.e. comments)
 The game is rather simple. Initially there are three player classes, all with 100 hit points,
 and one Boss class, with 500 hit points.
 Once a character reaches 0 hit points, it dies. All characters have a common base C++ class
-"Entity", and then override the functionality in that base C++ class to be player-class-specific:
+"Character", and then override the functionality in that base C++ class to be player-class-specific:
 
 - Rogue: can cast "attack", which reduces the hit points of a target by 20.
 - Warrior: can cast "defend", which forces the target to attack the Warrior. They have a defense mitigation modifier ("defense power") that reduces the hit points lost upon an attack. The final damage is "attack_power - defense_power".
@@ -152,9 +152,9 @@ You will be prompted as follows:
 
 ``` text
 reading PC configuration
-Added entity:     Fordring (   Warrior): HP=  100, mana =     0, no target
-Added entity:       Thrall (    Priest): HP=  100, mana =   100, no target
-Added entity:     Mograine (     Rogue): HP=  100, mana =     0, no target
+Added character:     Fordring (   Warrior): HP=  100, mana =     0, no target
+Added character:       Thrall (    Priest): HP=  100, mana =   100, no target
+Added character:     Mograine (     Rogue): HP=  100, mana =     0, no target
 reading NPC configuration
 Input boss:       Arthas (      Boss): HP=  500, mana =     0, no target
 reading NPC action script
@@ -184,7 +184,7 @@ reading NPC action script
 |--------------------------------------------|
 |--------------------------------------------|
 Welcome brave traveler...
-You venture forth from your stronghold in Azeroth to the icy continent of Northrend, accompanied only by your fellow adventurers and your courage. You have tracked Arthas Menethil to his Frozen Throne in the plagued wastelands of Icecrown. Once a brave champion of Lordaeron, Arthas was corrupted by evil and his soul subsumed by the shaman Ner'zhul upon taking the cursed Runeblade, Frostmourne, forming the entity known as the Lich King, threatening all life in Azeroth to become mindless undead slaves of the Burning Legion. The Knights of the Ebon Blade and the Argent Crusade have now formed the Ashen Verdict, and tasked you to destroy the Lich King and end his undead plague upon Azeroth. As you reach the Frozen Throne, the Lich King's seat, you hear a voice in your head. The Lich King whispers "Young heroes, I was once like you. You have come to this place seeking to bring judgement upon the damned. But, be warned. In the end, all that awaits you is death. Only then will you understand, you've been following in my footsteps all along. So come then, you heroes! Come in all your power and glory! For in this final hour, all must serve the one... true... king... Frostmourne HUNGERS....". The battle is joined.
+You venture forth from your stronghold in Azeroth to the icy continent of Northrend, accompanied only by your fellow adventurers and your courage. You have tracked Arthas Menethil to his Frozen Throne in the plagued wastelands of Icecrown. Once a brave champion of Lordaeron, Arthas was corrupted by evil and his soul subsumed by the shaman Ner'zhul upon taking the cursed Runeblade, Frostmourne, forming the character known as the Lich King, threatening all life in Azeroth to become mindless undead slaves of the Burning Legion. The Knights of the Ebon Blade and the Argent Crusade have now formed the Ashen Verdict, and tasked you to destroy the Lich King and end his undead plague upon Azeroth. As you reach the Frozen Throne, the Lich King's seat, you hear a voice in your head. The Lich King whispers "Young heroes, I was once like you. You have come to this place seeking to bring judgement upon the damned. But, be warned. In the end, all that awaits you is death. Only then will you understand, you've been following in my footsteps all along. So come then, you heroes! Come in all your power and glory! For in this final hour, all must serve the one... true... king... Frostmourne HUNGERS....". The battle is joined.
 Are you ready to begin? [Y/n]
 ```
 
