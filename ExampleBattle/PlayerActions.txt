@@ -1,0 +1,6 @@
+! A list of player actions for you to copy-and-paste.
+Rachel;attack;Bob;
+William;defend;Bob;
+Poppy;heal;William;
+Poppy;heal;Rachel;
+Poppy;heal;Poppy;
