@@ -14,24 +14,24 @@ int main(int argc, char **argv) {
   bool success = true;
 
   // Read the party configurations
-  success = battle.readPCConfiguration("ThreeStooges.txt");
+  success = battle.readPCConfiguration("PlayerCharacters.txt");
   if (!success) {
     std::cout << "No PC configuration read" << std::endl;
     return 0;
   }
-  success = battle.readNPCConfiguration("Shemp.txt");
+  success = battle.readNPCConfiguration("Boss.txt");
   if (!success) {
     std::cout << "No PC configuration read" << std::endl;
     return 0;
   }
 
   // Read a test sequence.
-  success = battle.loadActionScript("ShempAttacks.txt");
+  success = battle.loadActionScript("BossScript.txt");
   if (!success) {
     std::cout << "No NPC script read" << std::endl;
     return 0;
   }
-  success = battle.loadActionScript("StoogesBattle.txt");
+  success = battle.loadActionScript("PlayerScript.txt");
   if (!success) {
     std::cout << "No PC script read" << std::endl;
     return 0;

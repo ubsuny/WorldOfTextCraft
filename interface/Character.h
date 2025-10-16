@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <random>
 
 // ----------------------------------------------------------------//
 /* _________ .__                                __                 */
@@ -86,6 +87,7 @@ public:
   // Input and output
   virtual void input(std::string instring);
   virtual void input(std::istream &in);
+  virtual void post_input() {}; // Hook for actions after input, i.e. after stats are set
   virtual void print(std::ostream &out) const;
   virtual void printStats(std::ostream &out) const;
   friend std::ostream &operator<<(std::ostream &out, Character const &e);
@@ -144,6 +146,10 @@ protected:
   int defaultAttack(Character *target = 0);
   int defaultHeal(Character *target = 0);
   int defaultDefend(Character *target = 0);
+
+  // Random number generator
+  std::default_random_engine gen_;
+  std::poisson_distribution<> poisson_;
 
   // These will store the history of the results of various actions
   ActionMap my_attacks_;

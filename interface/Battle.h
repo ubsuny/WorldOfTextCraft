@@ -153,6 +153,8 @@ private:
 
   bool scripted_; // Is this fight scripted or user-turns?
 
+  std::map<std::shared_ptr<Character>, std::string> last_action_; // Save last action; next turn, perform as default action if input is empty
+
   //
   //
   // Internal workings of "Battle":

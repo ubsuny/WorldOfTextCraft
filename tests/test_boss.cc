@@ -7,10 +7,10 @@
 
 int main(int argc, char **argv) {
 
-  Warrior warrior("Larry", 3);
-  Priest priest("Moe", 5);
-  Rogue rogue("Curly", 15);
-  Boss boss("Shemp", 15, 4, 2, 100, 8);
+  Warrior warrior("William The Warrior", 3);
+  Priest priest("Poppy The Priest", 5);
+  Rogue rogue("Rachel The Rogue", 15);
+  Boss boss("Bob The Boss", 15, 4, 2, 100, 8);
 
   unsigned i = 0;
   bool done = false;

@@ -17,6 +17,13 @@ Character::Character(std::string class_name, std::string name,
     // Check to make sure your powers aren't outrageous
     checkPowers();
   }
+
+  std::random_device rd;
+  gen_ = std::default_random_engine(rd());
+  std::cout << "[Character::Character] DEBUG : Trying out gen_ a few times" << std::endl;
+  for (int i = 0; i < 10; ++i) {
+    std::cout << gen_() << std::endl;
+  }
 }
 
 // Destructor

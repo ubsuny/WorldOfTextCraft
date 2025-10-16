@@ -1,6 +1,8 @@
 #ifndef Warrior_h
 #define Warrior_h
 
+#include "Character.h"
+
 /* __          __             _             */
 /* \ \        / /            (_)            */
 /*  \ \  /\  / /_ _ _ __ _ __ _  ___  _ __  */
@@ -13,9 +15,9 @@ public:
   Warrior(std::string name = "", int defense_power = 0)
       : Character("Warrior", name, 0, defense_power, 0) {};
 
-  int defend(Character *other = 0) override { return defaultDefend(other); }
-  int heal(Character *other = 0) override { return defaultHeal(other); }
-  int attack(Character *other = 0) override { return defaultAttack(other); }
+  int defend(Character *other = 0) override;
+  int heal(Character *other = 0) override;
+  int attack(Character *other = 0) override;
 };
 
 #endif

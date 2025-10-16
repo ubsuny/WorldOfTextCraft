@@ -78,6 +78,7 @@ bool Battle::readPCConfiguration(std::string filename) {
           continue;
         }
         character->input(tokens);
+        character->post_input();
         pcs_.push_back(character);
         std::cout << "Added character: " << *(pcs_.back()) << std::endl;
       }
@@ -445,15 +446,24 @@ bool Battle::performUserActions(std::istream &in) {
       continue;
     }
 
-    std::cout << "Action for " << (*it)->name() << ": " << std::endl;
+    std::cout << ">> Enter action for " << (*it)->name() << " : " << std::endl;
+    if (last_action_[(*it)] != "") {
+      std::cout << "   (Default: " << last_action_[(*it)] << ")" << std::endl;
+    }
     QuickAction qa;
     std::string line;
-    in >> line;
-    // std::getline( in, line );
+    //in >> line;
+    std::getline(in, line);
+    if (line == "") {
+      line = last_action_[(*it)];
+    }
     bool success = parseAction(line, qa);
     while (!success) {
       std::cout << "Invalid input, try again" << std::endl;
-      in >> line;
+      std::getline(in, line);
+      if (line == "") {
+        line = last_action_[(*it)];
+      }
       success = parseAction(line, qa);
     }
     if (qa.action == ATTACK) {
@@ -471,6 +481,7 @@ bool Battle::performUserActions(std::istream &in) {
       std::cout << (*it)->name() << " has vanquished your foe." << std::endl;
       return false;
     }
+    last_action_[(*it)] = line;
   }
 
   ++turn_;
@@ -557,7 +568,7 @@ void Battle::printStats(std::ostream &out) {
 }
 
 void Battle::print(std::ostream &out) {
-  out << "------------------------------- Turn : " << turn_
+  out << std::endl << "------------------------------- Turn : " << turn_
       << "-------------------------------" << std::endl;
   out << "--------------" << std::endl;
   out << "   === players:" << std::endl;

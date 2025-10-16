@@ -4,58 +4,36 @@ This is a trivial turn-based role-playing fighting game, designed to teach C++.
 Apologies to Blizzard Entertainment for cribbing (and butchering) their content.
 
 The goal was to make this "bare bones" without a complicated build so people can see for themselves what is involved in the software.
-This does require C++11 because of the use of a `vector< shared_ptr<T> >` for memory management.
-There is a very trivial Makefile to create three executables:
+This does require C++11 because of the use of a `std::vector<shared_ptr<T>>` for memory management.
 
-- **test_character**: test the base fighting class functionality
-- **test_boss**: test the boss functionality
-- **test_battle**: test a pre-scripted battle
-- **WorldOfTextCraft**: the actual text-based RPG.
-=
-In order to compile just type `make`.
+The included Makefile automatically compiles the program as follows:
+- All files matching `src/%.cc` (except for the main executable WorldOfTextCraft.cc) are compiled to `build/\*.o`. 
+- The tests, at `tests/%.cc`, are compiled to executables `tests/%.exe` (linked with the `build/%.o` files). 
+- `src/WorldOfTextCraft.cc` is compiled to `/bin/WorldOfTextCraft.exe`. 
+
+In order to compile just type `make`. To delete your compiled stuff, type `make clean`, or just manually delete the `.exe` files.
 
 ## PHY410/505 at UB
 
 ### Docker image
+This program can be run using the PHY410/505 Docker image, https://hub.docker.com/r/subsuny/compphys. From this folder, just run `./runDocker.sh ubsuny/compphys:latest` (if using WSL+Ubuntu, instead run `./runDocker_wfix.sh ubsuny/compphys:latest` to fix a permissions issue). These are the same scripts that we provide in https://github.com/ubsuny/CompPhys.
 
-If you are using the [CompPhys](https://github.com/ubsuny/CompPhys)
-repository and the [docker image](https://hub.docker.com/r/subsuny/compphys) you
-should add this to the `results` folder **in your host OS**:
+Remember to do your work inside the mounted folder! Files outside the mounted folder will be deleted upon exiting the container. 
 
-``` bash
-cd /your/working/directory/results
-git clone git@github.com:ubsuny/WorldOfTextCraft.git
-```
 
-so it looks like this:
-
-``` bash
-└── results
-    ├── CompPhys
-    └── WorldOfTextCraft
-```
-
-Then go to the parent folder of the `results` folder:
-
-``` bash
-cd /your/working/directory/
-./runDocker.sh ubsuny/compphys:latest 1
-```
-
-This will launch the docker image, so you will be in the `/results`
-folder in docker.
-
-You can then:
+## Usage
+For convenience, you might want to add `WorldOfTextCraft/bin` to your path, so you can access the executable from anywhere:
 
 ``` bash
 cd WorldOfTextCraft
-make
+export PATH=$PATH:$(readlink -e bin)
+# Now you can call WorldOfTextCraft.exe from anywhere
 ```
 
-## Usage
+To run the program:
 
 ``` bash
-./WorldOfTextCraft player_config boss_config boss_script
+WorldOfTextCraft.exe player_config boss_config boss_script
 ```
 
 Here, we have:
@@ -67,38 +45,42 @@ Here, we have:
 For instance:
 
 ``` bash
-./WorldOfTextCraft AshenVerdict.txt Arthas.txt ArthasAttacks.txt
+cd ExampleBattle
+WorldOfTextCraft.exe PlayerCharacters.txt Boss.txt BossScript.txt
 ```
 
-## Syntax
+You can copy-and-paste lines from PlayerScript.txt into the game to run through the example battle. Note: after your first turn, if you hit "enter", you will execute the previous command without having to type anything.
 
-In all syntax files, lines starting with "!" will be ignored (i.e. comments)
+### Configuration files
 
-- Player configuration
-  - One line per party member, syntax : `type;name;attack_power;defense_power;heal_power;`
+In all configuration files, lines starting with "!" will be ignored (i.e. comments)
+
+- Player configuration file:
+  - Contains a list of party members (i.e., the characters you control) and their stats.
+  - One line per party member, syntax: `type;name;attack_power;defense_power;heal_power;`
   - Example:
 
   ``` text
   !
-  ! Test party configuration:
+  ! Test party configuration: 
   ! Warrior, Rogue, Priest
-  ! Fields are :
-  ! name, character type, attack power, heal power, defense power
-  Rogue;Curly;20;0;0;
-  Priest;Larry;0;0;8;
-  Warrior;Moe;0;3;0;
+  ! Fields are : 
+  ! class, name, attack power, defense power, heal power
+  Warrior;William The Warrior;0;3;0;
+  Priest;Poppy The Priest;0;0;8;
+  Rogue;Rachel The Rogue;20;0;0;
   ```
 
-- Boss configuration :
+- Boss configuration file:
   - First line is the description of the battle to be displayed. 
   - Then one line per boss, syntax: `name;attack_power;heal_power;defense_power;mana;multi_attack`
   - Example:
 
   ``` text
   !Description:
-  Larry, Moe, and Curly are the Three Stooges. Their poor friend Shemp has been bitten by a zombie and is trying to kill them. Help Larry, Moe, and Curly put Shemp out of his misery. Nyuk Nyuk Nyuk.
+  William the Warrior, Poppy the Priest, and Rachel the Rogue enter their first dungeon. Alas, their poor friend Bob has been bitten by a zombie and is trying to kill them. Help William, Poppy, and Rachel put Bob out of his misert!
   ! Non-Player character. Fields are "name", attack power, heal power, defense power, mana, multi attack power
-  Shemp;20;0;0;10;5;
+  Bob The Boss;20;0;0;10;5;
   ```
 
 - Boss script:
@@ -113,7 +95,8 @@ In all syntax files, lines starting with "!" will be ignored (i.e. comments)
   Shemp;attack;all;
   ```
 
-- Player script: (for `test_battle` only, not for `WorldOfTextCraft`):
+- Player script:
+  - Contains a script for player character actions. Note: this is only implemented in `test_battle.cc`, not `WorldOfTextCraft.cc`.  
   - One line per action, syntax: `name;action;target_name`
   - Here, "action" can be "attack", "heal", or "defend"
   - "target_name" must refer to a member of the Boss party.
@@ -121,18 +104,18 @@ In all syntax files, lines starting with "!" will be ignored (i.e. comments)
 
   ``` text
   ! Test battle configuration.
-  Curly;attack;Shemp;
-  Moe;defend;Shemp;
-  Larry;heal;Moe;
+  Rachel The Rogue;attack;Bob The Boss;
+  William The Warrior;defend;Bob The Boss;
+  Poppy The Priest;heal;William The Warrior;
   ```
 
 ## Game Mechanics
 
 The game is rather simple. Initially there are three player classes, all with 100 hit points,
 and one Boss class, with 500 hit points.
-Once a character reaches 0 hit points, it dies. All characters have a common base C++ class
+Once a character reaches 0 hit points, it dies.
+ All characters have a common base C++ class
 "Character", and then override the functionality in that base C++ class to be player-class-specific:
-
 - Rogue: can cast "attack", which reduces the hit points of a target by 20.
 - Warrior: can cast "defend", which forces the target to attack the Warrior. They have a defense mitigation modifier ("defense power") that reduces the hit points lost upon an attack. The final damage is "attack_power - defense_power".
 - Priest: can cast "heal", which increases the hit points of a target by 20. Starts with 100 mana.
@@ -140,12 +123,14 @@ Once a character reaches 0 hit points, it dies. All characters have a common bas
 
 You can adjust the game mechanics to add player classes of your own!
 
+
 ## Playing WorldOfTextCraft : The Lich King Scenario
+In the Lich King scenario, you fight the boss Arthas (the "Lich King" bit is just for flavor, it behaves more or less the same as Bob The Boss from the example). The configuration files are located at `WorldOfTextCraft/LichKing`.
 
-To execute "The Lich King" Scenario, execute:
-
+To run the scenario, make sure `WorldOfTextCraft/bin` is in your path, and then execute:
 ``` bash
-./WorldOfTextCraft AshenVerdict.txt Arthas.txt ArthasAttacks.txt
+cd LichKing
+WorldOfTextCraft.exe PlayerCharacters.txt Arthas.txt ArthasAttacks.txt
 ```
 
 You will be prompted as follows:
@@ -153,7 +138,7 @@ You will be prompted as follows:
 ``` text
 reading PC configuration
 Added character:     Fordring (   Warrior): HP=  100, mana =     0, no target
-Added character:       Thrall (    Priest): HP=  100, mana =   100, no target
+Added character:       Tarvek (    Priest): HP=  100, mana =   100, no target
 Added character:     Mograine (     Rogue): HP=  100, mana =     0, no target
 reading NPC configuration
 Input boss:       Arthas (      Boss): HP=  500, mana =     0, no target
@@ -199,7 +184,7 @@ Arthas will perform action 3 on their target :  NO TARGET!
 --------------
    === players:
     Fordring (   Warrior): HP=  100, mana =     0, no target
-      Thrall (    Priest): HP=  100, mana =   100, no target
+      Tarvek (    Priest): HP=  100, mana =   100, no target
     Mograine (     Rogue): HP=  100, mana =     0, no target
 
    === monsters:
@@ -209,8 +194,8 @@ Arthas attacks Fordring with attack power 20
 Fordring loses 10 hit points after attack 20 and defense 10
 Arthas multi-attacks Fordring with attack power 8
 Fordring loses 0 hit points after attack 8 and defense 10
-Arthas multi-attacks Thrall with attack power 8
-Thrall loses 8 hit points after attack 8 and defense 0
+Arthas multi-attacks Tarvek with attack power 8
+Tarvek loses 8 hit points after attack 8 and defense 0
 Arthas multi-attacks Mograine with attack power 8
 Mograine loses 8 hit points after attack 8 and defense 0
 Action for Fordring:
@@ -229,9 +214,9 @@ You will then have the next player.
 Enter the next action, and you will again see a printout of the status of your attack:
 
 ``` text
-Action for Thrall:
-Thrall;heal;Mograine;
-Thrall heals Mograine for 12
+Action for Tarvek:
+Tarvek;heal;Mograine;
+Tarvek heals Mograine for 12
 ```
 
 Finally you will see your next character.
@@ -250,7 +235,7 @@ This reaches the end of your turn, so the status is printed again, and it is the
 --------------
    === players:
     Fordring (   Warrior): HP=   90, mana =     0, target=      Arthas
-      Thrall (    Priest): HP=   92, mana =    90, target=    Mograine
+      Tarvek (    Priest): HP=   92, mana =    90, target=    Mograine
     Mograine (     Rogue): HP=  100, mana =     0, target=      Arthas
 
    === monsters:
@@ -260,14 +245,14 @@ Arthas attacks Fordring with attack power 20
 Fordring loses 10 hit points after attack 20 and defense 10
 Arthas multi-attacks Fordring with attack power 8
 Fordring loses 0 hit points after attack 8 and defense 10
-Arthas multi-attacks Thrall with attack power 8
-Thrall loses 8 hit points after attack 8 and defense 0
+Arthas multi-attacks Tarvek with attack power 8
+Tarvek loses 8 hit points after attack 8 and defense 0
 Arthas multi-attacks Mograine with attack power 8
 Mograine loses 8 hit points after attack 8 and defense 0
 Action for Fordring:
 ```
 
-You can then cycle through until your party is victorious (the Boss dies), or fails (all of you die). Then the scenario ends. To exit prematurely, simply "control-C" out.
+You can then cycle through until your party is victorious (the Boss dies), or fails (all of you die). Note: after your first turn, if you hit "enter", you will execute the previous command without having to type anything. Then the scenario ends. To exit prematurely, simply "control-C" out.
 
 ## Battle Log
 
@@ -289,7 +274,7 @@ The C++ game will create a log of actions in a
     "DamageReceived":[10,0],
     "HealingRecieved":[0]
     },
-    "Thrall":{"Attacks":[0],           # and so on
+    "Tarvek":{"Attacks":[0],           # and so on
     "Defends":[0],
     "Heals":[8],
     "DamageReceived":[8],
@@ -318,12 +303,12 @@ columnar like this, with the column headings printed on top:
 ------------ turn :  0  ---------------
 ====     Arthas : 26,  0,  0, 20,  0,
 ====   Fordring :  0, 10,  0, 10,  0,
-====     Thrall :  0,  0,  8,  8,  0,
+====     Tarvek :  0,  0,  8,  8,  0,
 ====   Mograine : 20,  0,  0,  8,  8,
 ------------ turn :  1  ---------------
 ====     Arthas : 26,  0,  0, 20,  0,
 ====   Fordring :  0, 10,  0, 10,  0,
-====     Thrall :  0,  0,  8,  8,  0,
+====     Tarvek :  0,  0,  8,  8,  0,
 ====   Mograine : 20,  0,  0,  8,  8,
 ...
 

@@ -1,3 +1,0 @@
-! Test battle configuration.
-Arthas;attack;target;
-Arthas;attack;all;
