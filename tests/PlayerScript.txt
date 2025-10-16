@@ -1,0 +1,4 @@
+! Test battle configuration.
+Rachel The Rogue;attack;Bob The Boss;
+William The Warrior;defend;Bob The Boss;
+Poppy The Priest;heal;William The Warrior;

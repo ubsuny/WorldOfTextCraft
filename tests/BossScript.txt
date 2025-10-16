@@ -1,0 +1,3 @@
+! Test battle configuration.
+Bob The Boss;attack;target;
+Bob The Boss;attack;all;
