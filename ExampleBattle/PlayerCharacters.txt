@@ -1,0 +1,8 @@
+!
+! Test party configuration: 
+! Warrior, Rogue, Priest
+! Fields are : 
+! class, name, attack power, defense power, heal power
+Warrior;William;0;3;0;
+Priest;Poppy;0;0;8;
+Rogue;Rachel;20;0;0;

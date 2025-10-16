@@ -1,0 +1,3 @@
+Warrior;Alice The Warrior;0;10;0;
+Priest;Bob The Priest;0;0;12;
+Rogue;Carol The Rogue;20;0;0;

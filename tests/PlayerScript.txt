@@ -1,0 +1,4 @@
+! Test battle configuration.
+Rachel;attack;Bob;
+William;defend;Bob;
+Poppy;heal;William;

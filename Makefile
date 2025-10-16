@@ -1,38 +1,48 @@
-# I am a comment, and I want to say that the variable CXX will be
-# the compiler to use.
-CXX=g++
-# Hey!, I am comment number 2. I want to say that CXXFLAGS will be the
-# options I'll pass to the compiler.
-CXX_FLAGS=-Wall -std=c++11
+# Compiler and flags
+CXX := g++
+CXXFLAGS := -std=c++17 -O2 -Wall -I./interface
 
+# Directories
+SRC_DIR := src
+INC_DIR := interface
+TEST_DIR := tests
+OBJ_DIR := build
+BIN_DIR := bin
 
-EXEC_SRC = test_entity.cc test_boss.cc test_battle.cc WorldOfTextCraft.cc
-EXEC = test_entity test_boss test_battle WorldOfTextCraft
+# File patterns
+SRC_FILES := $(filter-out src/WorldOfTextCraft.cc, $(wildcard $(SRC_DIR)/*.cc))
+OBJ_FILES := $(patsubst $(SRC_DIR)/%.cc, $(OBJ_DIR)/%.o, $(SRC_FILES))
+TEST_FILES := $(wildcard $(TEST_DIR)/*.cc)
+TEST_BINS := $(patsubst $(TEST_DIR)/%.cc, $(TEST_DIR)/%.exe, $(TEST_FILES))
 
-SRCS := $(wildcard *.cc)
-SRCS := $(filter-out $(EXEC_SRC), $(SRCS))
-OBJECTS = $(SRCS:.cc=.o)
+# Default target
+all: bin/WorldOfTextCraft.exe $(TEST_BINS)
 
+# Rule to build main executable
+bin/WorldOfTextCraft.exe: $(OBJ_FILES) | $(BIN_DIR)
+	@echo "Linking $@..."
+	$(CXX) $(CXXFLAGS) -o $@ src/WorldOfTextCraft.cc $(OBJ_FILES)
 
-all: $(EXEC)
+# Rule to build test executables
+$(TEST_DIR)/%.exe: $(TEST_DIR)/%.cc $(OBJ_FILES) | $(BIN_DIR)
+	@echo "Linking $@..."
+	$(CXX) $(CXXFLAGS) -o $@ $< $(OBJ_FILES)
 
-test_entity: $(OBJECTS) test_entity.cc
-	$(CXX) $(CXX_FLAGS) $(OBJECTS) test_entity.cc -o test_entity
+# Rule to compile source files into object files
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc | $(OBJ_DIR)
+	@echo "Compiling $<..."
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-test_boss: $(OBJECTS) test_boss.cc
-	$(CXX) $(CXX_FLAGS) $(OBJECTS) test_boss.cc -o test_boss
+# Create directories if they don't exist
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
-test_battle: $(OBJECTS) test_battle.cc
-	$(CXX) $(CXX_FLAGS) $(OBJECTS) test_battle.cc -o test_battle
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
 
-WorldOfTextCraft: $(OBJECTS) WorldOfTextCraft.cc
-	$(CXX) $(CXX_FLAGS) $(OBJECTS) WorldOfTextCraft.cc -o WorldOfTextCraft
-
-
-# To obtain object files
-%.o: %.cc
-	$(CXX) $(CXX_FLAGS) -c  $< -o $@
-
-# To remove generated files
+# Cleanup
 clean:
-	rm -f $(EXEC) $(OBJECTS)
+	rm -rf ./$(OBJ_DIR)/*.o ./$(BIN_DIR)/*.exe
+
+# Phony targets
+.PHONY: all clean

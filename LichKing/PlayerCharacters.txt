@@ -1,0 +1,4 @@
+! class ; name ; attack power ; defense power ;heal power;
+Warrior;Fordring;0;10;0;
+Priest;Nakha;0;0;12;
+Rogue;Mograine;20;0;0;

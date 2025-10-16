@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include "Character.h"
 
 #include "Warrior.h"
 #include "Rogue.h"
@@ -47,24 +47,20 @@ int main( int argc, char ** argv ) {
 
   battle.splash();
   std::cout << "Are you ready to begin? [Y/n] " << std::endl;
-  char c;
-  std::cin >> c;
-  if ( c == 'y' || c == 'Y') {
+  std::string response;
+  std::getline(std::cin, response);
+  if (response == "y" || response == "Y" || response == "") {
     std::cout << "Excellent... let us begin..." << std::endl;
 
     battle.printActions(); 
-
-  
 
     // Now loop and FIGHT!
     success= true;
     do {
       battle.print();
-
       success = battle.performUserActions(); 
-
     }
-    while ( success );
+    while (success);
 
   }
 

@@ -1,0 +1,6 @@
+! A list of player actions for you to copy-and-paste.
+Mograine;attack;Arthas;
+Fordring;defend;Arthas;
+Nakha;heal;Mograine;
+Nakha;heal;Fordring;
+Nakha;heal;Nakha;

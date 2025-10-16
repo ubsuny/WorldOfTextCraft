@@ -1,0 +1,4 @@
+!Description:
+William the Warrior, Poppy the Priest, and Rachel the Rogue enter their first dungeon. Alas, their poor friend Bob has been bitten by a zombie and is trying to kill them. Help William, Poppy, and Rachel put Bob out of his misery!
+! Non-Player character. Fields are "name", attack power, heal power, defense power, mana, multi attack power
+Bob;20;0;0;10;5;
