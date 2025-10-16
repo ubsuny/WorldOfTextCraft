@@ -105,7 +105,7 @@ Did you win now? Copy the outcome to your writeup, and commit `problem1b.txt` to
 ## Problem 2: The Lich King battle
 ![Lich King](data/LichKing.png)
 
-For Problem 2, we'll run through a different scenario, the Lich King boss. The configuration files are located at `WorldOfTextCraft/LichKing`. (If you quit your terminal window after the last problem, remember to re-run the PATH command so that `WorldOfTextCraft.exe` is on your PATH.) Run through this battle with the following commands, including your updated Rogue from Problem 1b:
+For Problem 2, we'll run through a different scenario, the Lich King boss. The Lich King is named Arthas, and our party consists of a Warrior name Fordring, a Priest named Nakha, and a Rogue named Mograine. The configuration files are located at `WorldOfTextCraft/LichKing`. (If you quit your terminal window after the last problem, remember to re-run the PATH command so that `WorldOfTextCraft.exe` is on your PATH.) Run through this battle with the following commands, including your updated Rogue from Problem 1b:
 
 ``` bash
 cd LichKing

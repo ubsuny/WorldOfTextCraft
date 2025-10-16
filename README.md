@@ -115,11 +115,11 @@ The game is rather simple. Initially there are three player classes, all with 10
 and one Boss class, with 500 hit points.
 Once a character reaches 0 hit points, it dies.
  All characters have a common base C++ class
-"Character", and then override the functionality in that base C++ class to be player-class-specific:
-- Rogue: can cast "attack", which reduces the hit points of a target by 20.
-- Warrior: can cast "defend", which forces the target to attack the Warrior. They have a defense mitigation modifier ("defense power") that reduces the hit points lost upon an attack. The final damage is "attack_power - defense_power".
-- Priest: can cast "heal", which increases the hit points of a target by 20. Starts with 100 mana.
-- Boss: can cast any spell, and also has a special "multi_attack", where it attacks the entire party with another stat "multi_attack_power". This should be less than the attack power.
+"Character", and then override the functionality in that base C++ class to be player-class-specific. Each class only has one meaningful action:
+- Rogue: can use "attack", which reduces the hit points of a target by 20.
+- Warrior: can use "defend", which forces the target to attack the Warrior. They have a defense mitigation modifier ("defense power") that reduces the hit points lost upon an attack. The final damage is "attack_power - defense_power".
+- Priest: can use "heal", which increases the hit points of a target by 20. Starts with 100 mana.
+- Boss: can cast any spell, and also has a special `multi_attack`, where it attacks the entire party with another stat `multi_attack_power`. This should be less than the attack power.
 
 You can adjust the game mechanics to add player classes of your own!
 
@@ -138,7 +138,7 @@ You will be prompted as follows:
 ``` text
 reading PC configuration
 Added character:     Fordring (   Warrior): HP=  100, mana =     0, no target
-Added character:       Tarvek (    Priest): HP=  100, mana =   100, no target
+Added character:       Nakha  (    Priest): HP=  100, mana =   100, no target
 Added character:     Mograine (     Rogue): HP=  100, mana =     0, no target
 reading NPC configuration
 Input boss:       Arthas (      Boss): HP=  500, mana =     0, no target
@@ -184,7 +184,7 @@ Arthas will perform action 3 on their target :  NO TARGET!
 --------------
    === players:
     Fordring (   Warrior): HP=  100, mana =     0, no target
-      Tarvek (    Priest): HP=  100, mana =   100, no target
+      Nakha (    Priest): HP=  100, mana =   100, no target
     Mograine (     Rogue): HP=  100, mana =     0, no target
 
    === monsters:
@@ -194,8 +194,8 @@ Arthas attacks Fordring with attack power 20
 Fordring loses 10 hit points after attack 20 and defense 10
 Arthas multi-attacks Fordring with attack power 8
 Fordring loses 0 hit points after attack 8 and defense 10
-Arthas multi-attacks Tarvek with attack power 8
-Tarvek loses 8 hit points after attack 8 and defense 0
+Arthas multi-attacks Nakha with attack power 8
+Nakha loses 8 hit points after attack 8 and defense 0
 Arthas multi-attacks Mograine with attack power 8
 Mograine loses 8 hit points after attack 8 and defense 0
 Action for Fordring:
@@ -214,9 +214,9 @@ You will then have the next player.
 Enter the next action, and you will again see a printout of the status of your attack:
 
 ``` text
-Action for Tarvek:
-Tarvek;heal;Mograine;
-Tarvek heals Mograine for 12
+Action for Nakha:
+Nakha;heal;Mograine;
+Nakha heals Mograine for 12
 ```
 
 Finally you will see your next character.
@@ -235,7 +235,7 @@ This reaches the end of your turn, so the status is printed again, and it is the
 --------------
    === players:
     Fordring (   Warrior): HP=   90, mana =     0, target=      Arthas
-      Tarvek (    Priest): HP=   92, mana =    90, target=    Mograine
+      Nakha  (    Priest): HP=   92, mana =    90, target=    Mograine
     Mograine (     Rogue): HP=  100, mana =     0, target=      Arthas
 
    === monsters:
@@ -245,8 +245,8 @@ Arthas attacks Fordring with attack power 20
 Fordring loses 10 hit points after attack 20 and defense 10
 Arthas multi-attacks Fordring with attack power 8
 Fordring loses 0 hit points after attack 8 and defense 10
-Arthas multi-attacks Tarvek with attack power 8
-Tarvek loses 8 hit points after attack 8 and defense 0
+Arthas multi-attacks Nakha with attack power 8
+Nakha loses 8 hit points after attack 8 and defense 0
 Arthas multi-attacks Mograine with attack power 8
 Mograine loses 8 hit points after attack 8 and defense 0
 Action for Fordring:
@@ -274,7 +274,7 @@ The C++ game will create a log of actions in a
     "DamageReceived":[10,0],
     "HealingRecieved":[0]
     },
-    "Tarvek":{"Attacks":[0],           # and so on
+    "Nakha":{"Attacks":[0],           # and so on
     "Defends":[0],
     "Heals":[8],
     "DamageReceived":[8],
@@ -303,12 +303,12 @@ columnar like this, with the column headings printed on top:
 ------------ turn :  0  ---------------
 ====     Arthas : 26,  0,  0, 20,  0,
 ====   Fordring :  0, 10,  0, 10,  0,
-====     Tarvek :  0,  0,  8,  8,  0,
+====     Nakha :  0,  0,  8,  8,  0,
 ====   Mograine : 20,  0,  0,  8,  8,
 ------------ turn :  1  ---------------
 ====     Arthas : 26,  0,  0, 20,  0,
 ====   Fordring :  0, 10,  0, 10,  0,
-====     Tarvek :  0,  0,  8,  8,  0,
+====     Nakha :  0,  0,  8,  8,  0,
 ====   Mograine : 20,  0,  0,  8,  8,
 ...
 
