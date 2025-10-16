@@ -19,7 +19,7 @@ TEST_BINS := $(patsubst $(TEST_DIR)/%.cc, $(TEST_DIR)/%.exe, $(TEST_FILES))
 all: bin/WorldOfTextCraft.exe $(TEST_BINS)
 
 # Rule to build main executable
-bin/WorldOfTextCraft.exe: $(OBJ_FILES)
+bin/WorldOfTextCraft.exe: $(OBJ_FILES) | $(BIN_DIR)
 	@echo "Linking $@..."
 	$(CXX) $(CXXFLAGS) -o $@ src/WorldOfTextCraft.cc $(OBJ_FILES)
 
